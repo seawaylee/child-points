@@ -1,0 +1,74 @@
+<view class="container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="empty-state">
+    <view class="empty-text">加载中...</view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{tasks.length === 0}}" class="empty-state">
+    <view class="empty-icon">📋</view>
+    <view class="empty-text">还没有任务</view>
+    <view class="empty-text" style="margin-top:10rpx;">请在家庭管理中添加任务</view>
+  </view>
+
+  <!-- 任务列表 -->
+  <block wx:else>
+    <!-- 赚积分分组 -->
+    <view class="section" wx:if="{{earnTasks.length > 0}}">
+      <view class="section-header">
+        <view class="section-dot dot-earn"></view>
+        <text class="section-title">赚积分</text>
+      </view>
+      <view class="task-list">
+        <view
+          class="task-item card"
+          wx:for="{{earnTasks}}"
+          wx:key="_id"
+          data-task-id="{{item._id}}"
+          bindtap="onTaskTap"
+        >
+          <view class="task-icon-wrap task-icon-earn">
+            <text class="task-icon-text">{{item.emoji || '⭐'}}</text>
+          </view>
+          <view class="task-info flex-1">
+            <view class="task-name">{{item.name}}</view>
+            <view class="task-meta">
+              <text class="tag-earn">赚积分</text>
+              <text class="task-ppm" wx:if="{{item.pointsPerMinute}}">{{item.pointsPerMinute}}分/分钟</text>
+            </view>
+          </view>
+          <view class="task-arrow">›</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 花积分分组 -->
+    <view class="section" wx:if="{{spendTasks.length > 0}}">
+      <view class="section-header">
+        <view class="section-dot dot-spend"></view>
+        <text class="section-title">花积分</text>
+      </view>
+      <view class="task-list">
+        <view
+          class="task-item card"
+          wx:for="{{spendTasks}}"
+          wx:key="_id"
+          data-task-id="{{item._id}}"
+          bindtap="onTaskTap"
+        >
+          <view class="task-icon-wrap task-icon-spend">
+            <text class="task-icon-text">{{item.emoji || '⭐'}}</text>
+          </view>
+          <view class="task-info flex-1">
+            <view class="task-name">{{item.name}}</view>
+            <view class="task-meta">
+              <text class="tag-spend">花积分</text>
+              <text class="task-ppm" wx:if="{{item.pointsPerMinute}}">{{item.pointsPerMinute}}分/分钟</text>
+            </view>
+          </view>
+          <view class="task-arrow">›</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,8 @@
+<view class="points-card">
+  <view class="points-card__name">{{childName}}</view>
+  <view class="points-card__balance">{{points}}</view>
+  <view class="points-card__stats">
+    <view class="points-card__stat">今日 +{{todayEarn}}</view>
+    <view class="points-card__stat">今日 -{{todaySpend}}</view>
+  </view>
+</view>

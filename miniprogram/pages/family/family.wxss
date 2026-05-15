@@ -1,0 +1,253 @@
+/* 表单模式 */
+.form-card {
+  padding: 40rpx;
+}
+
+.form-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 40rpx;
+  text-align: center;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.form-input {
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 30rpx;
+  border: 2rpx solid #e0e0e0;
+}
+
+.invite-code-input {
+  text-align: center;
+  font-size: 40rpx;
+  letter-spacing: 16rpx;
+  font-weight: bold;
+}
+
+.form-hint {
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+  margin-top: 10rpx;
+}
+
+/* 卡片区域标题 */
+.card-section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+/* 信息行 */
+.info-row {
+  padding: 10rpx 0;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.info-value-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.info-value {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.info-edit {
+  font-size: 28rpx;
+}
+
+/* 编辑行 */
+.edit-row {
+  padding: 10rpx 0;
+}
+
+.edit-group {
+  gap: 12rpx;
+  margin-top: 8rpx;
+}
+
+.edit-input {
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  padding: 14rpx 20rpx;
+  font-size: 28rpx;
+  border: 2rpx solid #4CAF50;
+}
+
+.edit-btn {
+  padding: 12rpx 20rpx;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+.edit-btn-save {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.edit-btn-cancel {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+/* 邀请码 */
+.invite-card {
+  background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+  border: none;
+}
+
+.invite-code-box {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  justify-content: center;
+  gap: 20rpx;
+}
+
+.invite-code {
+  font-size: 52rpx;
+  font-weight: bold;
+  letter-spacing: 16rpx;
+  color: #1976D2;
+}
+
+.copy-btn {
+  background: #1976D2;
+  color: #fff;
+  padding: 12rpx 28rpx;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+}
+
+.invite-hint {
+  font-size: 24rpx;
+  color: #1565C0;
+  text-align: center;
+  margin-top: 16rpx;
+  opacity: 0.8;
+}
+
+/* 成员列表 */
+.member-list {
+  margin-top: 10rpx;
+}
+
+.member-item {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.member-item:last-child {
+  border-bottom: none;
+}
+
+.member-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  background-color: #E8F5E9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-default {
+  font-size: 32rpx;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.member-name {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.member-role {
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 6rpx;
+  flex-shrink: 0;
+}
+
+.role-admin {
+  background-color: #FFF3E0;
+  color: #E65100;
+}
+
+.role-member {
+  background-color: #f5f5f5;
+  color: #999;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: #999;
+  text-align: center;
+  padding: 20rpx 0;
+}
+
+/* 任务管理入口 */
+.manage-entry {
+  padding: 24rpx 30rpx;
+}
+
+.manage-entry-content {
+  width: 100%;
+}
+
+.manage-entry-left {
+  gap: 12rpx;
+}
+
+.manage-entry-icon {
+  font-size: 36rpx;
+}
+
+.manage-entry-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.manage-entry-arrow {
+  font-size: 40rpx;
+  color: #ccc;
+}
+
+/* 退出按钮 */
+.leave-btn {
+  margin-top: 40rpx;
+  font-size: 28rpx;
+  padding: 24rpx 0;
+}

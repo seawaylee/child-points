@@ -1,0 +1,189 @@
+/* 周统计 */
+.week-summary {
+  background: linear-gradient(135deg, #fff, #f9f9f9);
+  border-left: 6rpx solid #4CAF50;
+}
+
+.week-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+.week-stats {
+  padding: 10rpx 0;
+}
+
+.week-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.week-stat-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.week-stat-value {
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.week-earn {
+  color: #4CAF50;
+}
+
+.week-spend {
+  color: #ff5252;
+}
+
+.week-stat-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background: #eee;
+}
+
+/* 日期分组头 */
+.date-header {
+  display: flex;
+  align-items: baseline;
+  padding: 24rpx 10rpx 12rpx;
+}
+
+.date-text {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.date-sub {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 16rpx;
+}
+
+/* 记录项 */
+.record-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+}
+
+.record-left {
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.record-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.icon-earn {
+  background-color: #E8F5E9;
+}
+
+.icon-spend {
+  background-color: #FFEBEE;
+}
+
+.record-icon-text {
+  font-size: 36rpx;
+}
+
+.record-info {
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.record-task-name {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.record-operator {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.record-time {
+  font-size: 22rpx;
+  color: #bbb;
+}
+
+.record-note {
+  font-size: 22rpx;
+  color: #888;
+  margin-top: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-right {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  gap: 12rpx;
+}
+
+.record-points {
+  font-size: 34rpx;
+  font-weight: bold;
+  min-width: 80rpx;
+  text-align: right;
+}
+
+.points-earn {
+  color: #4CAF50;
+}
+
+.points-spend {
+  color: #ff5252;
+}
+
+.record-photo {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 10rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.photo-thumb {
+  width: 100%;
+  height: 100%;
+}
+
+/* 加载更多 */
+.load-more {
+  padding: 30rpx 0;
+  text-align: center;
+}
+
+.load-more-text {
+  font-size: 24rpx;
+  color: #999;
+}

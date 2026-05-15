@@ -1,0 +1,85 @@
+<view class="container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 无家庭状态 -->
+  <view wx:elif="{{!hasFamily}}" class="empty-state">
+    <view class="empty-icon">🏠</view>
+    <view class="empty-text">还没有加入家庭</view>
+    <view class="empty-text" style="margin-top:10rpx;margin-bottom:60rpx;">创建或加入一个家庭开始使用</view>
+    <view class="btn-primary" style="margin-bottom:30rpx;" bindtap="onCreateFamily">创建家庭</view>
+    <view class="btn-primary" style="background-color:#2196F3;" bindtap="onJoinFamily">加入家庭</view>
+  </view>
+
+  <!-- 有家庭状态 -->
+  <block wx:else>
+    <!-- 顶部设置按钮 -->
+    <view class="header-bar flex-between">
+      <view class="header-title">{{childName}}的积分</view>
+      <view class="settings-btn" bindtap="onSettingsTap">⚙️</view>
+    </view>
+
+    <!-- 积分展示卡片 -->
+    <view class="points-card">
+      <view class="points-label">当前可用积分</view>
+      <view class="points-value">{{balance}}</view>
+      <view class="points-unit">1积分 = 1分钟</view>
+      <view class="points-summary flex-row">
+        <view class="summary-item">
+          <text class="summary-label">今日获得</text>
+          <text class="summary-value earn-text">+{{todayEarned}}</text>
+        </view>
+        <view class="summary-divider"></view>
+        <view class="summary-item">
+          <text class="summary-label">今日消费</text>
+          <text class="summary-value spend-text">-{{todaySpent}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 赚积分任务 -->
+    <view class="section" wx:if="{{earnTasks.length > 0}}">
+      <view class="section-title">📖 赚积分</view>
+      <view class="task-grid">
+        <view
+          class="task-card task-card-earn"
+          wx:for="{{earnTasks}}"
+          wx:key="_id"
+          data-task-id="{{item._id}}"
+          bindtap="onTaskTap"
+        >
+          <view class="task-icon">{{item.emoji || '⭐'}}</view>
+          <view class="task-name">{{item.name}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 花积分任务 -->
+    <view class="section" wx:if="{{spendTasks.length > 0}}">
+      <view class="section-title">🎮 花积分</view>
+      <view class="task-grid">
+        <view
+          class="task-card task-card-spend"
+          wx:for="{{spendTasks}}"
+          wx:key="_id"
+          data-task-id="{{item._id}}"
+          bindtap="onTaskTap"
+        >
+          <view class="task-icon">{{item.emoji || '⭐'}}</view>
+          <view class="task-name">{{item.name}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 无任务状态 -->
+    <view
+      class="empty-state"
+      wx:if="{{earnTasks.length === 0 && spendTasks.length === 0 && !loading}}"
+    >
+      <view class="empty-icon">📋</view>
+      <view class="empty-text">还没有任务，请在家庭管理中添加</view>
+    </view>
+  </block>
+</view>

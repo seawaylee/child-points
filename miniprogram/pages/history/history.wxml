@@ -1,0 +1,75 @@
+<view class="container">
+  <!-- 周统计卡片 -->
+  <view class="week-summary card" wx:if="{{groupedRecords.length > 0}}">
+    <view class="week-title">本周统计</view>
+    <view class="week-stats flex-row">
+      <view class="week-stat flex-1">
+        <view class="week-stat-label">获得积分</view>
+        <view class="week-stat-value week-earn">+{{weekEarned}}</view>
+      </view>
+      <view class="week-stat-divider"></view>
+      <view class="week-stat flex-1">
+        <view class="week-stat-label">消费积分</view>
+        <view class="week-stat-value week-spend">-{{weekSpent}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading && groupedRecords.length === 0}}" class="empty-state">
+    <view class="empty-text">加载中...</view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{groupedRecords.length === 0 && !loading}}" class="empty-state">
+    <view class="empty-icon">📝</view>
+    <view class="empty-text">还没有记录</view>
+    <view class="empty-text" style="margin-top:10rpx;">快去记一笔吧</view>
+  </view>
+
+  <!-- 记录列表 -->
+  <block wx:for="{{groupedRecords}}" wx:key="date" wx:for-item="group">
+    <view class="date-header">
+      <text class="date-text">{{group.dateText}}</text>
+      <text class="date-sub" wx:if="{{group.dateText !== group.date}}">{{group.date}}</text>
+    </view>
+
+    <view
+      class="record-item card"
+      wx:for="{{group.records}}"
+      wx:for-item="record"
+      wx:key="_id"
+    >
+      <view class="record-left flex-row">
+        <view class="record-info flex-1">
+          <view class="record-task-name">{{record.taskName || '未知任务'}}</view>
+          <view class="record-meta">
+            <text class="record-operator">{{record.createdByNick}}</text>
+            <text class="record-time">{{record.timeStr}}</text>
+          </view>
+          <view class="record-note" wx:if="{{record.note}}">{{record.note}}</view>
+        </view>
+      </view>
+      <view class="record-right flex-row">
+        <view class="record-points {{record.taskType === 'earn' ? 'points-earn' : 'points-spend'}}">
+          {{record.pointsText}}
+        </view>
+        <view
+          class="record-photo"
+          wx:if="{{record.photoFileId}}"
+          data-fileid="{{record.photoFileId}}"
+          bindtap="onPreviewPhoto"
+        >
+          <image class="photo-thumb" src="{{record.photoFileId}}" mode="aspectFill" />
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view class="load-more" wx:if="{{loading && groupedRecords.length > 0}}">
+    <text class="load-more-text">加载中...</text>
+  </view>
+  <view class="load-more" wx:elif="{{!hasMore && groupedRecords.length > 0}}">
+    <text class="load-more-text">没有更多了</text>
+  </view>
+</view>

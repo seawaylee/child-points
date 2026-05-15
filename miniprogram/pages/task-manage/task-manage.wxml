@@ -1,0 +1,183 @@
+<view class="container" bindtap="onTapBlank">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="empty-state">
+    <view class="empty-text">加载中...</view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{tasks.length === 0}}" class="empty-state">
+    <view class="empty-icon">📋</view>
+    <view class="empty-text">还没有任务</view>
+    <view class="empty-text" style="margin-top:10rpx;">点击下方按钮添加任务</view>
+  </view>
+
+  <!-- 任务列表 -->
+  <block wx:else>
+    <!-- 赚积分任务 -->
+    <view class="section" wx:if="{{earnTasks.length > 0}}">
+      <view class="section-title-bar flex-row">
+        <view class="section-dot dot-earn"></view>
+        <text class="section-label">赚积分任务</text>
+      </view>
+      <view class="task-wrap">
+        <view
+          class="task-swipe-wrap"
+          wx:for="{{earnTasks}}"
+          wx:key="_id"
+          data-task-id="{{item._id}}"
+          bindtouchstart="onTouchStart"
+          bindtouchend="onTouchEnd"
+        >
+          <view class="task-swipe-content {{swipedTaskId === item._id ? 'swiped' : ''}}">
+            <view
+              class="task-manage-item card"
+              data-task="{{item}}"
+              bindtap="onEditTask"
+            >
+              <view class="task-item-icon icon-earn-wrap">
+                <text>{{item.icon || '📖'}}</text>
+              </view>
+              <view class="task-item-info flex-1">
+                <view class="task-item-name">{{item.name}}</view>
+                <view class="task-item-meta flex-row">
+                  <text class="tag-earn">赚积分</text>
+                  <text class="task-item-ppm">{{item.pointsPerMinute || 1}}分/分钟</text>
+                </view>
+              </view>
+              <view class="task-toggle" catchtap="onToggleEnabled" data-task-id="{{item._id}}" data-enabled="{{item.enabled !== false}}">
+                <view class="toggle-{{item.enabled !== false ? 'on' : 'off'}}"></view>
+              </view>
+            </view>
+            <view
+              class="task-swipe-action"
+              data-task-id="{{item._id}}"
+              catchtap="onDeleteTask"
+            >
+              <text class="swipe-action-text">删除</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 花积分任务 -->
+    <view class="section" wx:if="{{spendTasks.length > 0}}">
+      <view class="section-title-bar flex-row">
+        <view class="section-dot dot-spend"></view>
+        <text class="section-label">花积分任务</text>
+      </view>
+      <view class="task-wrap">
+        <view
+          class="task-swipe-wrap"
+          wx:for="{{spendTasks}}"
+          wx:key="_id"
+          data-task-id="{{item._id}}"
+          bindtouchstart="onTouchStart"
+          bindtouchend="onTouchEnd"
+        >
+          <view class="task-swipe-content {{swipedTaskId === item._id ? 'swiped' : ''}}">
+            <view
+              class="task-manage-item card"
+              data-task="{{item}}"
+              bindtap="onEditTask"
+            >
+              <view class="task-item-icon icon-spend-wrap">
+                <text>{{item.icon || '🎮'}}</text>
+              </view>
+              <view class="task-item-info flex-1">
+                <view class="task-item-name">{{item.name}}</view>
+                <view class="task-item-meta flex-row">
+                  <text class="tag-spend">花积分</text>
+                  <text class="task-item-ppm">{{item.pointsPerMinute || 1}}分/分钟</text>
+                </view>
+              </view>
+              <view class="task-toggle" catchtap="onToggleEnabled" data-task-id="{{item._id}}" data-enabled="{{item.enabled !== false}}">
+                <view class="toggle-{{item.enabled !== false ? 'on' : 'off'}}"></view>
+              </view>
+            </view>
+            <view
+              class="task-swipe-action"
+              data-task-id="{{item._id}}"
+              catchtap="onDeleteTask"
+            >
+              <text class="swipe-action-text">删除</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 添加按钮 -->
+  <view class="add-btn-wrap" catchtap="onAddTask">
+    <view class="add-btn">
+      <text class="add-btn-icon">+</text>
+      <text class="add-btn-text">添加任务</text>
+    </view>
+  </view>
+
+  <!-- 添加/编辑弹窗 -->
+  <view class="modal-mask" wx:if="{{showForm}}" catchtap="onCloseForm">
+    <view class="modal-content" catchtap="">
+      <view class="modal-title">{{editTaskId ? '编辑任务' : '添加任务'}}</view>
+
+      <view class="form-group">
+        <view class="form-label">任务名称</view>
+        <input
+          class="form-control"
+          placeholder="例如：看书"
+          value="{{formName}}"
+          bindinput="onFormNameInput"
+        />
+      </view>
+
+      <view class="form-group">
+        <view class="form-label">类型</view>
+        <view class="type-selector flex-row">
+          <view
+            class="type-option {{formType === 'earn' ? 'type-selected type-earn' : ''}}"
+            data-type="earn"
+            bindtap="onFormTypeChange"
+          >
+            <view class="custom-radio {{formType === 'earn' ? 'radio-earn' : ''}}"></view>
+            <text>赚积分</text>
+          </view>
+          <view
+            class="type-option {{formType === 'spend' ? 'type-selected type-spend' : ''}}"
+            data-type="spend"
+            bindtap="onFormTypeChange"
+          >
+            <view class="custom-radio {{formType === 'spend' ? 'radio-spend' : ''}}"></view>
+            <text>花积分</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <view class="form-label">图标（输入emoji）</view>
+        <input
+          class="form-control"
+          placeholder="例如：📖"
+          value="{{formIcon}}"
+          bindinput="onFormIconInput"
+        />
+      </view>
+
+      <view class="form-group">
+        <view class="form-label">每分钟积分数</view>
+        <input
+          class="form-control"
+          type="digit"
+          placeholder="1"
+          value="{{formPointsPerMinute}}"
+          bindinput="onFormPPMInput"
+        />
+      </view>
+
+      <view class="form-actions flex-row">
+        <view class="form-btn form-btn-cancel flex-1" bindtap="onCloseForm">取消</view>
+        <view class="form-btn form-btn-submit flex-1" bindtap="onSubmitForm">保存</view>
+      </view>
+    </view>
+  </view>
+</view>

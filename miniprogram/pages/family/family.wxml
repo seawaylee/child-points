@@ -1,0 +1,152 @@
+<view class="container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="empty-state">
+    <view class="empty-text">加载中...</view>
+  </view>
+
+  <!-- 创建家庭模式 -->
+  <block wx:elif="{{mode === 'create'}}">
+    <view class="form-card card">
+      <view class="form-title">创建家庭</view>
+      <view class="form-item">
+        <view class="form-label">家庭名称</view>
+        <input
+          class="form-input"
+          placeholder="例如：温馨小家"
+          value="{{familyName}}"
+          bindinput="onFamilyNameInput"
+        />
+      </view>
+      <view class="form-item">
+        <view class="form-label">宝贝名字</view>
+        <input
+          class="form-input"
+          placeholder="例如：小明"
+          value="{{childName}}"
+          bindinput="onChildNameInput"
+        />
+      </view>
+      <view class="btn-primary" style="margin-top:40rpx;" bindtap="onCreateFamily">创建家庭</view>
+    </view>
+  </block>
+
+  <!-- 加入家庭模式 -->
+  <block wx:elif="{{mode === 'join'}}">
+    <view class="form-card card">
+      <view class="form-title">加入家庭</view>
+      <view class="form-item">
+        <view class="form-label">邀请码</view>
+        <input
+          class="form-input invite-code-input"
+          placeholder="请输入6位邀请码"
+          maxlength="6"
+          value="{{inviteCode}}"
+          bindinput="onInviteCodeInput"
+        />
+      </view>
+      <view class="form-hint">请向家庭创建者获取邀请码</view>
+      <view class="btn-primary" style="margin-top:40rpx;background-color:#2196F3;" bindtap="onJoinFamily">加入家庭</view>
+    </view>
+  </block>
+
+  <!-- 查看模式 -->
+  <block wx:elif="{{familyInfo}}">
+    <!-- 家庭信息卡片 -->
+    <view class="card">
+      <view class="card-section-title">家庭信息</view>
+
+      <!-- 家庭名称 -->
+      <view class="info-row flex-between" wx:if="{{!editingFamilyName}}">
+        <view class="info-label">家庭名称</view>
+        <view class="info-value-row" bindtap="{{isAdmin ? 'onEditFamilyName' : ''}}">
+          <text class="info-value">{{familyInfo.name || '未设置'}}</text>
+          <text wx:if="{{isAdmin}}" class="info-edit">✏️</text>
+        </view>
+      </view>
+      <view class="info-row edit-row" wx:else>
+        <view class="info-label">家庭名称</view>
+        <view class="edit-group flex-row">
+          <input
+            class="edit-input flex-1"
+            value="{{editFamilyNameValue}}"
+            bindinput="onEditFamilyNameInput"
+          />
+          <view class="edit-btn edit-btn-save" bindtap="onSaveFamilyName">保存</view>
+          <view class="edit-btn edit-btn-cancel" bindtap="onCancelEditFamilyName">取消</view>
+        </view>
+      </view>
+
+      <view class="divider"></view>
+
+      <!-- 宝贝名字 -->
+      <view class="info-row flex-between" wx:if="{{!editingChildName}}">
+        <view class="info-label">宝贝名字</view>
+        <view class="info-value-row" bindtap="{{isAdmin ? 'onEditChildName' : ''}}">
+          <text class="info-value">{{familyInfo.childName || '未设置'}}</text>
+          <text wx:if="{{isAdmin}}" class="info-edit">✏️</text>
+        </view>
+      </view>
+      <view class="info-row edit-row" wx:else>
+        <view class="info-label">宝贝名字</view>
+        <view class="edit-group flex-row">
+          <input
+            class="edit-input flex-1"
+            value="{{editChildNameValue}}"
+            bindinput="onEditChildNameInput"
+          />
+          <view class="edit-btn edit-btn-save" bindtap="onSaveChildName">保存</view>
+          <view class="edit-btn edit-btn-cancel" bindtap="onCancelEditChildName">取消</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 邀请码卡片 -->
+    <view class="card invite-card">
+      <view class="card-section-title">邀请码</view>
+      <view class="invite-code-box flex-row">
+        <text class="invite-code">{{familyInfo.inviteCode || '------'}}</text>
+        <view class="copy-btn" bindtap="onCopyInviteCode">复制</view>
+      </view>
+      <view class="invite-hint">分享邀请码给其他家长，即可加入家庭</view>
+    </view>
+
+    <!-- 成员列表 -->
+    <view class="card">
+      <view class="card-section-title">家庭成员</view>
+      <view class="member-list">
+        <view class="member-item flex-row" wx:for="{{members}}" wx:key="_id">
+          <view class="member-avatar">
+            <image
+              wx:if="{{item.avatarUrl}}"
+              class="avatar-img"
+              src="{{item.avatarUrl}}"
+              mode="aspectFill"
+            />
+            <view wx:else class="avatar-default">{{(item.nickName || '?')[0]}}</view>
+          </view>
+          <view class="member-info flex-1">
+            <view class="member-name">{{item.nickName || '未知用户'}}</view>
+          </view>
+          <view class="member-role {{item.role === 'admin' ? 'role-admin' : 'role-member'}}">
+            {{item.role === 'admin' ? '管理员' : '成员'}}
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{members.length === 0}}" class="empty-hint">暂无成员</view>
+    </view>
+
+    <!-- 任务管理入口（仅管理员） -->
+    <view wx:if="{{isAdmin}}" class="card manage-entry" bindtap="onGoTaskManage">
+      <view class="manage-entry-content flex-between">
+        <view class="manage-entry-left flex-row">
+          <text class="manage-entry-icon">📋</text>
+          <text class="manage-entry-text">任务管理</text>
+        </view>
+        <text class="manage-entry-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 退出家庭 -->
+    <view class="btn-danger leave-btn" bindtap="onLeaveFamily">退出家庭</view>
+  </block>
+</view>

@@ -1,0 +1,5 @@
+<view class="task-btn {{compact ? 'task-btn--compact' : ''}}" style="background-color: {{bgColor}};" bindtap="onTap">
+  <view class="task-btn__icon">{{icon}}</view>
+  <view class="task-btn__name">{{task.name}}</view>
+  <view class="task-btn__tag" style="color: {{typeColor}}; border-color: {{typeColor}};">{{typeTag}}</view>
+</view>

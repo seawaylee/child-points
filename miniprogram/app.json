@@ -1,0 +1,46 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/record/record",
+    "pages/history/history",
+    "pages/record-detail/record-detail",
+    "pages/family/family",
+    "pages/task-manage/task-manage"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTitleText": "积分小管家",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4CAF50",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "积分",
+        "iconPath": "images/tab-points.png",
+        "selectedIconPath": "images/tab-points-active.png"
+      },
+      {
+        "pagePath": "pages/record/record",
+        "text": "记一笔",
+        "iconPath": "images/tab-record.png",
+        "selectedIconPath": "images/tab-record-active.png"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "text": "流水",
+        "iconPath": "images/tab-history.png",
+        "selectedIconPath": "images/tab-history-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "cloud": true,
+  "style": "v2"
+}

@@ -1,0 +1,210 @@
+/* 任务头部 */
+.task-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 30rpx;
+}
+
+.task-type-badge {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.badge-earn {
+  background-color: #E8F5E9;
+}
+
+.badge-spend {
+  background-color: #FFEBEE;
+}
+
+.task-header-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.task-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.task-ppm {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 区域 */
+.section {
+  margin-bottom: 30rpx;
+}
+
+.section-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+  font-weight: 500;
+}
+
+/* 时长选择 */
+.duration-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.duration-btn {
+  min-width: 140rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  background-color: #f5f5f5;
+  font-size: 28rpx;
+  color: #333;
+  border: 2rpx solid #e0e0e0;
+}
+
+.duration-active {
+  background-color: #E8F5E9;
+  color: #4CAF50;
+  border-color: #4CAF50;
+  font-weight: bold;
+}
+
+.custom-input-wrap {
+  margin-top: 20rpx;
+}
+
+.custom-input {
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  font-size: 30rpx;
+  border: 2rpx solid #e0e0e0;
+}
+
+.duration-result {
+  margin-top: 20rpx;
+  padding: 16rpx 24rpx;
+  background-color: #FFF3E0;
+  border-radius: 12rpx;
+}
+
+.duration-result-text {
+  font-size: 26rpx;
+  color: #E65100;
+}
+
+/* 照片区域 */
+.photo-area {
+  margin-top: 10rpx;
+}
+
+.photo-preview {
+  position: relative;
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.photo-image {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-remove {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  width: 44rpx;
+  height: 44rpx;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 24rpx;
+}
+
+.photo-add {
+  width: 240rpx;
+  height: 240rpx;
+  border: 2rpx dashed #ccc;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fafafa;
+}
+
+.photo-add-icon {
+  font-size: 60rpx;
+  margin-bottom: 10rpx;
+}
+
+.photo-add-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 备注 */
+.note-input-wrap {
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 4rpx;
+}
+
+.note-input {
+  width: 100%;
+  min-height: 120rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+/* 提交按钮 */
+.submit-area {
+  margin-top: 40rpx;
+  padding-bottom: 40rpx;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 96rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 48rpx;
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.submit-earn {
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  box-shadow: 0 6rpx 20rpx rgba(76, 175, 80, 0.3);
+}
+
+.submit-spend {
+  background: linear-gradient(135deg, #ff5252, #ff7B7B);
+  box-shadow: 0 6rpx 20rpx rgba(255, 82, 82, 0.3);
+}
+
+.submit-btn-disabled {
+  opacity: 0.6;
+}

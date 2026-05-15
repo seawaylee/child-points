@@ -1,0 +1,152 @@
+/* 加载状态 */
+.loading-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.loading-text {
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 顶部栏 */
+.header-bar {
+  padding: 10rpx 0 20rpx;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.settings-btn {
+  font-size: 44rpx;
+  padding: 10rpx;
+}
+
+/* 积分展示卡片 */
+.points-card {
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  border-radius: 24rpx;
+  padding: 50rpx 40rpx;
+  color: #fff;
+  margin-bottom: 40rpx;
+  box-shadow: 0 8rpx 30rpx rgba(76, 175, 80, 0.3);
+}
+
+.points-label {
+  font-size: 28rpx;
+  opacity: 0.9;
+  margin-bottom: 10rpx;
+}
+
+.points-value {
+  font-size: 100rpx;
+  font-weight: bold;
+  line-height: 1.2;
+  text-align: center;
+  margin: 20rpx 0;
+}
+
+.points-unit {
+  font-size: 24rpx;
+  opacity: 0.8;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.points-summary {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16rpx;
+  padding: 20rpx 0;
+  justify-content: center;
+}
+
+.summary-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summary-label {
+  font-size: 22rpx;
+  opacity: 0.85;
+}
+
+.summary-value {
+  font-size: 34rpx;
+  font-weight: bold;
+  margin-top: 6rpx;
+}
+
+.summary-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* 分区标题 */
+.section {
+  margin-bottom: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+/* 任务网格 */
+.task-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10rpx;
+}
+
+.task-card {
+  width: calc(25% - 20rpx);
+  margin: 0 10rpx 20rpx;
+  padding: 24rpx 10rpx;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.task-card-earn {
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+}
+
+.task-card-spend {
+  background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+}
+
+.task-icon {
+  font-size: 48rpx;
+  margin-bottom: 10rpx;
+}
+
+.task-name {
+  font-size: 24rpx;
+  color: #333;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.earn-text {
+  color: #C8E6C9;
+}
+
+.spend-text {
+  color: #FFCDD2;
+}

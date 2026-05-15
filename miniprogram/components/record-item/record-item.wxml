@@ -1,0 +1,14 @@
+<view class="record-item">
+  <view class="record-item__left">
+    <view class="record-item__name">{{record.taskName}}</view>
+    <view class="record-item__meta">{{record.minutes}}分钟 · {{record.createdByNick}}</view>
+    <view class="record-item__time">{{timeStr}}</view>
+  </view>
+  <view class="record-item__right">
+    <view class="record-item__points" style="color: {{pointsColor}};">{{pointsSign}}{{record.points}}</view>
+    <view class="record-item__photo" bindtap="onPhotoTap">
+      <image wx:if="{{record.photoFileId}}" class="record-item__photo-img" src="{{record.photoFileId}}" mode="aspectFill" />
+      <view wx:else class="record-item__photo-placeholder">📷</view>
+    </view>
+  </view>
+</view>
