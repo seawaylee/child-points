@@ -58,6 +58,8 @@ async function createAction(OPENID, { name, childName }) {
     inviteCode,
     members: [OPENID],
     createdBy: OPENID,
+    monthlyAllowance: 100,
+    lastAllowanceMonth: '',
     createdAt: db.serverDate(),
     updatedAt: db.serverDate()
   }
@@ -208,6 +210,7 @@ async function updateAction(OPENID, { name, childName, childAvatar }) {
   if (name !== undefined) updateData.name = name
   if (childName !== undefined) updateData.childName = childName
   if (childAvatar !== undefined) updateData.childAvatar = childAvatar
+  if (event.monthlyAllowance !== undefined) updateData.monthlyAllowance = event.monthlyAllowance
 
   await db.collection('families').doc(user.familyId).update({
     data: updateData
@@ -235,6 +238,63 @@ async function getInviteCodeAction(OPENID) {
   }
 }
 
+// Action: check and grant monthly allowance
+async function checkAllowanceAction(OPENID) {
+  const userRes = await db.collection('users').doc(OPENID).get()
+  const user = userRes.data
+
+  if (!user.familyId) {
+    return { code: 0, data: { granted: false }, msg: 'success' }
+  }
+
+  const familyRes = await db.collection('families').doc(user.familyId).get()
+  const family = familyRes.data
+
+  const now = new Date()
+  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+
+  // Already granted this month
+  if (family.lastAllowanceMonth === currentMonth) {
+    return { code: 0, data: { granted: false }, msg: 'success' }
+  }
+
+  const allowance = family.monthlyAllowance || 0
+  if (allowance <= 0) {
+    return { code: 0, data: { granted: false }, msg: 'success' }
+  }
+
+  // Grant allowance
+  await db.collection('records').add({
+    data: {
+      familyId: user.familyId,
+      taskId: '',
+      taskName: '每月赠送积分',
+      taskType: 'earn',
+      minutes: 0,
+      points: allowance,
+      photoFileId: '',
+      createdBy: OPENID,
+      createdByNick: '系统',
+      note: `${currentMonth} 月度赠送`,
+      createdAt: db.serverDate()
+    }
+  })
+
+  // Update lastAllowanceMonth
+  await db.collection('families').doc(user.familyId).update({
+    data: {
+      lastAllowanceMonth: currentMonth,
+      updatedAt: db.serverDate()
+    }
+  })
+
+  return {
+    code: 0,
+    data: { granted: true, points: allowance, month: currentMonth },
+    msg: 'success'
+  }
+}
+
 exports.main = async (event, context) => {
   const { OPENID } = cloud.getWXContext()
   const { action } = event
@@ -251,6 +311,8 @@ exports.main = async (event, context) => {
         return await updateAction(OPENID, event)
       case 'getInviteCode':
         return await getInviteCodeAction(OPENID)
+      case 'checkAllowance':
+        return await checkAllowanceAction(OPENID)
       default:
         return { code: -1, msg: '未知的操作类型' }
     }

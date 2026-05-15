@@ -100,6 +100,32 @@
       </view>
     </view>
 
+    <!-- 月度赠送积分 -->
+    <view class="card">
+      <view class="card-section-title">月度赠送积分</view>
+      <view class="info-row flex-between" wx:if="{{!editingAllowance}}">
+        <view class="info-label">每月自动赠送</view>
+        <view class="info-value-row" bindtap="{{isAdmin ? 'onEditAllowance' : ''}}">
+          <text class="info-value">{{familyInfo.monthlyAllowance || 100}} 积分</text>
+          <text wx:if="{{isAdmin}}" class="info-edit">✏️</text>
+        </view>
+      </view>
+      <view class="info-row edit-row" wx:else>
+        <view class="info-label">每月赠送</view>
+        <view class="edit-group flex-row">
+          <input
+            class="edit-input flex-1"
+            type="number"
+            value="{{editAllowanceValue}}"
+            bindinput="onAllowanceInput"
+          />
+          <view class="edit-btn edit-btn-save" bindtap="onSaveAllowance">保存</view>
+          <view class="edit-btn edit-btn-cancel" bindtap="onCancelEditAllowance">取消</view>
+        </view>
+      </view>
+      <view class="allowance-hint">每月首次打开小程序时自动赠送积分</view>
+    </view>
+
     <!-- 邀请码卡片 -->
     <view class="card invite-card">
       <view class="card-section-title">邀请码</view>

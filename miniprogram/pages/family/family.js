@@ -18,7 +18,10 @@ Page({
     // 成员列表
     members: [],
     // 权限
-    isAdmin: false
+    isAdmin: false,
+    // 月度赠送
+    editingAllowance: false,
+    editAllowanceValue: 100
   },
 
   onLoad(options) {
@@ -254,5 +257,45 @@ Page({
         }
       }
     })
+  },
+
+  // === 月度赠送积分 ===
+  onEditAllowance() {
+    this.setData({
+      editingAllowance: true,
+      editAllowanceValue: this.data.familyInfo.monthlyAllowance || 100
+    })
+  },
+
+  onAllowanceInput(e) {
+    this.setData({ editAllowanceValue: e.detail.value })
+  },
+
+  async onSaveAllowance() {
+    const val = parseInt(this.data.editAllowanceValue)
+    if (isNaN(val) || val < 0) {
+      wx.showToast({ title: '请输入有效数字', icon: 'none' })
+      return
+    }
+    wx.showLoading({ title: '保存中...' })
+    try {
+      await cloud.callFunction('family', {
+        action: 'update',
+        monthlyAllowance: val
+      })
+      this.setData({
+        'familyInfo.monthlyAllowance': val,
+        editingAllowance: false
+      })
+      wx.hideLoading()
+      wx.showToast({ title: '已更新', icon: 'success' })
+    } catch (err) {
+      wx.hideLoading()
+      wx.showToast({ title: '更新失败', icon: 'none' })
+    }
+  },
+
+  onCancelEditAllowance() {
+    this.setData({ editingAllowance: false })
   }
 })

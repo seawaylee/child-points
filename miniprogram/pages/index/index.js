@@ -58,6 +58,7 @@ Page({
           this.loadBalance(),
           this.loadTasks()
         ])
+        this.checkMonthlyAllowance()
       } else {
         this.setData({ hasFamily: false })
       }
@@ -111,5 +112,22 @@ Page({
 
   onSettingsTap() {
     wx.navigateTo({ url: '/pages/family/family' })
+  },
+
+  async checkMonthlyAllowance() {
+    try {
+      const result = await cloud.callFunction('family', { action: 'checkAllowance' })
+      if (result && result.granted) {
+        wx.showToast({
+          title: `本月赠送 +${result.points} 积分`,
+          icon: 'none',
+          duration: 3000
+        })
+        // Refresh balance after allowance
+        this.loadBalance()
+      }
+    } catch (err) {
+      console.error('检查月度赠送失败', err)
+    }
   }
 })
