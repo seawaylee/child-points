@@ -23,44 +23,51 @@
 }
 
 .settings-btn {
-  font-size: 44rpx;
-  padding: 10rpx;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+  font-size: 36rpx;
 }
 
 /* 积分展示卡片 */
 .points-card {
-  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
   border-radius: 24rpx;
-  padding: 50rpx 40rpx;
+  padding: 48rpx 40rpx 40rpx;
   color: #fff;
   margin-bottom: 40rpx;
-  box-shadow: 0 8rpx 30rpx rgba(76, 175, 80, 0.3);
+  box-shadow: 0 12rpx 32rpx rgba(46, 125, 50, 0.25);
 }
 
 .points-label {
-  font-size: 28rpx;
-  opacity: 0.9;
-  margin-bottom: 10rpx;
+  font-size: 26rpx;
+  opacity: 0.85;
+  margin-bottom: 8rpx;
 }
 
 .points-value {
-  font-size: 100rpx;
-  font-weight: bold;
-  line-height: 1.2;
+  font-size: 96rpx;
+  font-weight: 800;
+  line-height: 1.15;
   text-align: center;
-  margin: 20rpx 0;
+  margin: 16rpx 0;
 }
 
 .points-unit {
   font-size: 24rpx;
-  opacity: 0.8;
+  opacity: 0.7;
   text-align: center;
-  margin-bottom: 30rpx;
+  margin-bottom: 28rpx;
 }
 
 .points-summary {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 14rpx;
   padding: 20rpx 0;
   justify-content: center;
 }
@@ -74,19 +81,19 @@
 
 .summary-label {
   font-size: 22rpx;
-  opacity: 0.85;
+  opacity: 0.8;
 }
 
 .summary-value {
-  font-size: 34rpx;
+  font-size: 32rpx;
   font-weight: bold;
   margin-top: 6rpx;
 }
 
 .summary-divider {
   width: 1rpx;
-  height: 60rpx;
-  background: rgba(255, 255, 255, 0.4);
+  height: 56rpx;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* 分区标题 */
@@ -95,8 +102,8 @@
 }
 
 .section-title {
-  font-size: 32rpx;
-  font-weight: bold;
+  font-size: 30rpx;
+  font-weight: 600;
   color: #333;
   margin-bottom: 20rpx;
 }
@@ -105,37 +112,37 @@
 .task-grid {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -10rpx;
+  margin: 0 -8rpx;
 }
 
 .task-card {
-  width: calc(25% - 20rpx);
-  margin: 0 10rpx 20rpx;
-  padding: 24rpx 10rpx;
-  border-radius: 16rpx;
+  width: calc(25% - 16rpx);
+  margin: 0 8rpx 16rpx;
+  padding: 24rpx 8rpx;
+  border-radius: 20rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
 }
 
 .task-card-earn {
-  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  background: #E8F5E9;
 }
 
 .task-card-spend {
-  background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+  background: #FFF3E0;
 }
 
 .task-icon {
-  font-size: 48rpx;
+  font-size: 44rpx;
   margin-bottom: 10rpx;
 }
 
 .task-name {
-  font-size: 24rpx;
-  color: #333;
+  font-size: 22rpx;
+  color: #555;
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -144,9 +151,9 @@
 }
 
 .earn-text {
-  color: #C8E6C9;
+  color: #A5D6A7;
 }
 
 .spend-text {
-  color: #FFCDD2;
+  color: #FFCC80;
 }

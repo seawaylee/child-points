@@ -35,7 +35,7 @@
               bindtap="onEditTask"
             >
               <view class="task-item-icon icon-earn-wrap">
-                <text>{{item.icon || '📖'}}</text>
+                <text>{{item.emoji || '📖'}}</text>
               </view>
               <view class="task-item-info flex-1">
                 <view class="task-item-name">{{item.name}}</view>
@@ -82,7 +82,7 @@
               bindtap="onEditTask"
             >
               <view class="task-item-icon icon-spend-wrap">
-                <text>{{item.icon || '🎮'}}</text>
+                <text>{{item.emoji || '🎮'}}</text>
               </view>
               <view class="task-item-info flex-1">
                 <view class="task-item-name">{{item.name}}</view>
@@ -109,8 +109,8 @@
   </block>
 
   <!-- 添加按钮 -->
-  <view class="add-btn-wrap" catchtap="onAddTask">
-    <view class="add-btn">
+  <view class="add-btn-wrap">
+    <view class="add-btn" catchtap="onAddTask">
       <text class="add-btn-icon">+</text>
       <text class="add-btn-text">添加任务</text>
     </view>
@@ -118,7 +118,7 @@
 
   <!-- 添加/编辑弹窗 -->
   <view class="modal-mask" wx:if="{{showForm}}" catchtap="onCloseForm">
-    <view class="modal-content" catchtap="">
+    <view class="modal-content" catchtap="onPreventBubble">
       <view class="modal-title">{{editTaskId ? '编辑任务' : '添加任务'}}</view>
 
       <view class="form-group">

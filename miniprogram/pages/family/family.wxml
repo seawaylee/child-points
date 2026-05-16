@@ -1,3 +1,4 @@
+<wxs src="./family.wxs" module="tools" />
 <view class="container">
   <!-- 加载状态 -->
   <view wx:if="{{loading}}" class="empty-state">
@@ -45,7 +46,7 @@
         />
       </view>
       <view class="form-hint">请向家庭创建者获取邀请码</view>
-      <view class="btn-primary" style="margin-top:40rpx;background-color:#2196F3;" bindtap="onJoinFamily">加入家庭</view>
+      <view class="btn-primary btn-secondary" style="margin-top:40rpx;" bindtap="onJoinFamily">加入家庭</view>
     </view>
   </block>
 
@@ -148,7 +149,7 @@
               src="{{item.avatarUrl}}"
               mode="aspectFill"
             />
-            <view wx:else class="avatar-default">{{(item.nickName || '?')[0]}}</view>
+            <view wx:else class="avatar-default">{{tools.firstChar(item.nickName)}}</view>
           </view>
           <view class="member-info flex-1">
             <view class="member-name">{{item.nickName || '未知用户'}}</view>
@@ -164,9 +165,9 @@
     <!-- 任务管理入口（仅管理员） -->
     <view wx:if="{{isAdmin}}" class="card manage-entry" bindtap="onGoTaskManage">
       <view class="manage-entry-content flex-between">
-        <view class="manage-entry-left flex-row">
-          <text class="manage-entry-icon">📋</text>
-          <text class="manage-entry-text">任务管理</text>
+        <view class="manage-entry-left">
+          <view class="manage-entry-text">任务管理</view>
+          <view class="manage-entry-sub">添加、编辑赚积分和花积分的任务</view>
         </view>
         <text class="manage-entry-arrow">›</text>
       </view>
@@ -175,4 +176,11 @@
     <!-- 退出家庭 -->
     <view class="btn-danger leave-btn" bindtap="onLeaveFamily">退出家庭</view>
   </block>
+
+  <!-- 无家庭信息兜底 -->
+  <view wx:elif="{{!loading && !familyInfo}}" class="empty-state">
+    <view class="empty-icon">🏠</view>
+    <view class="empty-text">未找到家庭信息</view>
+    <view class="btn-primary" style="margin-top:40rpx;" bindtap="onCreateFamily">创建家庭</view>
+  </view>
 </view>

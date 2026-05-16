@@ -1,0 +1,10 @@
+function firstChar(str) {
+  if (str && str.length > 0) {
+    return str[0]
+  }
+  return '?'
+}
+
+module.exports = {
+  firstChar: firstChar
+}

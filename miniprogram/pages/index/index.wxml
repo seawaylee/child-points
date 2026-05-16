@@ -9,8 +9,8 @@
     <view class="empty-icon">🏠</view>
     <view class="empty-text">还没有加入家庭</view>
     <view class="empty-text" style="margin-top:10rpx;margin-bottom:60rpx;">创建或加入一个家庭开始使用</view>
-    <view class="btn-primary" style="margin-bottom:30rpx;" bindtap="onCreateFamily">创建家庭</view>
-    <view class="btn-primary" style="background-color:#2196F3;" bindtap="onJoinFamily">加入家庭</view>
+    <view class="btn-primary" style="margin-bottom:24rpx;" bindtap="onCreateFamily">创建家庭</view>
+    <view class="btn-primary btn-secondary" bindtap="onJoinFamily">加入家庭</view>
   </view>
 
   <!-- 有家庭状态 -->
@@ -18,7 +18,7 @@
     <!-- 顶部设置按钮 -->
     <view class="header-bar flex-between">
       <view class="header-title">{{childName}}的积分</view>
-      <view class="settings-btn" bindtap="onSettingsTap">⚙️</view>
+      <view class="settings-btn" bindtap="onSettingsTap">⚙</view>
     </view>
 
     <!-- 积分展示卡片 -->

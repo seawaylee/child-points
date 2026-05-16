@@ -1,0 +1,122 @@
+.setup-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0 60rpx;
+  background: linear-gradient(180deg, #f0faf0 0%, #ffffff 100%);
+}
+
+.setup-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 80rpx;
+}
+
+.setup-icon {
+  font-size: 100rpx;
+  margin-bottom: 30rpx;
+}
+
+.setup-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.setup-subtitle {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.setup-form {
+  width: 100%;
+}
+
+.setup-presets {
+  margin-bottom: 32rpx;
+}
+
+.preset-label {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.preset-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 -10rpx;
+}
+
+.preset-item {
+  width: 140rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #333;
+  background: #fff;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 36rpx;
+  margin: 0 10rpx 20rpx;
+}
+
+.preset-item-active {
+  color: #fff;
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  border-color: #4CAF50;
+  box-shadow: 0 4rpx 16rpx rgba(76, 175, 80, 0.3);
+}
+
+.setup-divider {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1rpx;
+  background: #e0e0e0;
+}
+
+.divider-text {
+  padding: 0 20rpx;
+  font-size: 24rpx;
+  color: #ccc;
+}
+
+.setup-input-wrap {
+  background: #fff;
+  border-radius: 16rpx;
+  border: 2rpx solid #e0e0e0;
+  padding: 4rpx;
+  margin-bottom: 40rpx;
+}
+
+.setup-input {
+  padding: 24rpx;
+  font-size: 32rpx;
+  text-align: center;
+}
+
+.setup-btn {
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  color: #fff;
+  border-radius: 48rpx;
+  padding: 24rpx 0;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, 0.3);
+}
+
+.setup-btn-disabled {
+  opacity: 0.5;
+}

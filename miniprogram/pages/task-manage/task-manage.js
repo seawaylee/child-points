@@ -1,5 +1,10 @@
 const cloud = require('../../utils/cloud')
 
+const ICON_MAP = {
+  book: '📖', homework: '✏️', pen: '🖊️', run: '🏃', clean: '🧹',
+  tv: '📺', game: '🎮', snack: '🍪'
+}
+
 Page({
   data: {
     tasks: [],
@@ -31,7 +36,10 @@ Page({
   async loadTasks() {
     try {
       this.setData({ loading: true })
-      const tasks = await cloud.callFunction('task', { action: 'list' }) || []
+      const tasks = (await cloud.callFunction('task', { action: 'list' }) || []).map(t => ({
+        ...t,
+        emoji: ICON_MAP[t.icon] || t.icon || '⭐'
+      }))
       const earnTasks = tasks.filter(t => t.type === 'earn')
       const spendTasks = tasks.filter(t => t.type === 'spend')
       this.setData({
@@ -186,6 +194,9 @@ Page({
       }
     })
   },
+
+  // 阻止事件冒泡
+  onPreventBubble() {},
 
   // 点击空白处收起滑动
   onTapBlank() {

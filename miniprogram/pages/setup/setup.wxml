@@ -1,0 +1,41 @@
+<view class="setup-page">
+  <view class="setup-header">
+    <view class="setup-icon">👋</view>
+    <view class="setup-title">欢迎来到积分小管家</view>
+    <view class="setup-subtitle">请输入你的昵称，方便家人识别</view>
+  </view>
+
+  <view class="setup-form">
+    <view class="setup-presets">
+      <view class="preset-label">快速选择</view>
+      <view class="preset-list">
+        <view class="preset-item {{nickName === item ? 'preset-item-active' : ''}}"
+          wx:for="{{presets}}"
+          wx:key="*this"
+          data-name="{{item}}"
+          bindtap="onPresetTap">
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <view class="setup-divider">
+      <view class="divider-line"></view>
+      <view class="divider-text">或自定义</view>
+      <view class="divider-line"></view>
+    </view>
+
+    <view class="setup-input-wrap">
+      <input
+        class="setup-input"
+        placeholder="请输入昵称"
+        maxlength="12"
+        value="{{nickName}}"
+        bindinput="onInput"
+      />
+    </view>
+    <view class="setup-btn {{nickName.trim() ? '' : 'setup-btn-disabled'}}" bindtap="onSubmit">
+      开始使用
+    </view>
+  </view>
+</view>

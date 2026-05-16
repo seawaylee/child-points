@@ -20,12 +20,12 @@
 }
 
 .dot-spend {
-  background-color: #ff5252;
+  background-color: #FF7043;
 }
 
 .section-label {
   font-size: 30rpx;
-  font-weight: bold;
+  font-weight: 600;
   color: #333;
 }
 
@@ -33,7 +33,7 @@
 .task-swipe-wrap {
   overflow: hidden;
   position: relative;
-  margin-bottom: 16rpx;
+  margin-bottom: 12rpx;
 }
 
 .task-swipe-content {
@@ -67,23 +67,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 0 20rpx 20rpx 0;
 }
 
 .swipe-action-text {
   color: #fff;
   font-size: 28rpx;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 /* 任务项 */
 .task-item-icon {
-  width: 72rpx;
-  height: 72rpx;
+  width: 68rpx;
+  height: 68rpx;
   border-radius: 18rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 36rpx;
+  font-size: 34rpx;
   margin-right: 20rpx;
   flex-shrink: 0;
 }
@@ -93,7 +94,7 @@
 }
 
 .icon-spend-wrap {
-  background-color: #FFEBEE;
+  background-color: #FFF3E0;
 }
 
 .task-item-info {
@@ -113,7 +114,7 @@
 
 .task-item-ppm {
   font-size: 22rpx;
-  color: #999;
+  color: #aaa;
 }
 
 /* 开关 */
@@ -140,6 +141,7 @@
   position: absolute;
   right: 4rpx;
   top: 4rpx;
+  box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
 }
 
 .toggle-off {
@@ -159,37 +161,39 @@
   position: absolute;
   left: 4rpx;
   top: 4rpx;
+  box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
 }
 
 /* 添加按钮 */
 .add-btn-wrap {
   position: fixed;
   bottom: 40rpx;
-  left: 30rpx;
-  right: 30rpx;
+  left: 32rpx;
+  right: 32rpx;
   z-index: 10;
 }
 
 .add-btn {
-  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
   color: #fff;
   border-radius: 48rpx;
-  padding: 24rpx 0;
+  padding: 26rpx 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12rpx;
-  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, 0.3);
+  box-shadow: 0 8rpx 28rpx rgba(76, 175, 80, 0.3);
 }
 
 .add-btn-icon {
   font-size: 40rpx;
-  font-weight: bold;
+  font-weight: 300;
 }
 
 .add-btn-text {
   font-size: 32rpx;
-  font-weight: bold;
+  font-weight: 600;
+  letter-spacing: 2rpx;
 }
 
 /* 弹窗 */
@@ -199,7 +203,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.45);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -210,7 +214,8 @@
   width: 620rpx;
   background: #fff;
   border-radius: 24rpx;
-  padding: 40rpx;
+  padding: 44rpx;
+  box-shadow: 0 24rpx 48rpx rgba(0, 0, 0, 0.15);
 }
 
 .modal-title {
@@ -218,7 +223,7 @@
   font-weight: bold;
   color: #333;
   text-align: center;
-  margin-bottom: 30rpx;
+  margin-bottom: 36rpx;
 }
 
 .form-group {
@@ -227,41 +232,43 @@
 
 .form-label {
   font-size: 26rpx;
-  color: #666;
+  color: #888;
   margin-bottom: 10rpx;
+  font-weight: 500;
 }
 
 .form-control {
-  background: #f5f5f5;
-  border-radius: 12rpx;
-  padding: 20rpx;
+  background: #f7f8fa;
+  border-radius: 14rpx;
+  padding: 22rpx;
   font-size: 28rpx;
-  border: 2rpx solid #e0e0e0;
+  border: 2rpx solid transparent;
 }
 
 /* 类型选择器 */
 .type-selector {
-  gap: 30rpx;
+  gap: 20rpx;
 }
 
 .type-option {
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  padding: 12rpx 20rpx;
-  border-radius: 10rpx;
-  background: #f5f5f5;
+  gap: 10rpx;
+  padding: 14rpx 24rpx;
+  border-radius: 14rpx;
+  background: #f7f8fa;
   font-size: 28rpx;
+  border: 2rpx solid transparent;
 }
 
 .type-selected.type-earn {
   background: #E8F5E9;
-  border: 2rpx solid #4CAF50;
+  border-color: #4CAF50;
 }
 
 .type-selected.type-spend {
-  background: #FFEBEE;
-  border: 2rpx solid #ff5252;
+  background: #FFF3E0;
+  border-color: #FF7043;
 }
 
 /* 自定义单选按钮 */
@@ -269,7 +276,7 @@
   width: 32rpx;
   height: 32rpx;
   border-radius: 50%;
-  border: 4rpx solid #ccc;
+  border: 3rpx solid #ccc;
   position: relative;
 }
 
@@ -290,7 +297,7 @@
 }
 
 .radio-spend {
-  border-color: #ff5252;
+  border-color: #FF7043;
 }
 
 .radio-spend::after {
@@ -298,7 +305,7 @@
   width: 18rpx;
   height: 18rpx;
   border-radius: 50%;
-  background: #ff5252;
+  background: #FF7043;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -307,23 +314,25 @@
 
 /* 表单按钮 */
 .form-actions {
-  margin-top: 36rpx;
-  gap: 20rpx;
+  margin-top: 40rpx;
+  gap: 16rpx;
 }
 
 .form-btn {
   text-align: center;
-  padding: 20rpx 0;
-  border-radius: 12rpx;
+  padding: 22rpx 0;
+  border-radius: 14rpx;
   font-size: 30rpx;
+  font-weight: 500;
 }
 
 .form-btn-cancel {
   background: #f5f5f5;
-  color: #666;
+  color: #888;
 }
 
 .form-btn-submit {
-  background: #4CAF50;
+  background: linear-gradient(135deg, #4CAF50 0%, #43A047 100%);
   color: #fff;
+  box-shadow: 0 4rpx 12rpx rgba(76, 175, 80, 0.2);
 }

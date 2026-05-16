@@ -23,9 +23,8 @@ Page({
   },
 
   onShow() {
-    if (this.data.hasFamily) {
-      this.loadBalance()
-      this.loadTasks()
+    if (!this.data.loading) {
+      this.loadFamilyInfo()
     }
   },
 

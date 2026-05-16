@@ -7,13 +7,13 @@
 }
 
 .task-type-badge {
-  width: 80rpx;
-  height: 80rpx;
+  width: 76rpx;
+  height: 76rpx;
   border-radius: 20rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40rpx;
+  font-size: 38rpx;
   margin-right: 24rpx;
   flex-shrink: 0;
 }
@@ -23,7 +23,7 @@
 }
 
 .badge-spend {
-  background-color: #FFEBEE;
+  background-color: #FFF3E0;
 }
 
 .task-header-name {
@@ -41,17 +41,17 @@
 
 .task-ppm {
   font-size: 24rpx;
-  color: #999;
+  color: #aaa;
 }
 
 /* 区域 */
 .section {
-  margin-bottom: 30rpx;
+  margin-bottom: 32rpx;
 }
 
 .section-label {
   font-size: 28rpx;
-  color: #666;
+  color: #888;
   margin-bottom: 20rpx;
   font-weight: 500;
 }
@@ -69,18 +69,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12rpx;
-  background-color: #f5f5f5;
+  border-radius: 16rpx;
+  background-color: #f7f8fa;
   font-size: 28rpx;
-  color: #333;
-  border: 2rpx solid #e0e0e0;
+  color: #555;
+  border: 2rpx solid transparent;
+  font-weight: 500;
 }
 
 .duration-active {
   background-color: #E8F5E9;
-  color: #4CAF50;
+  color: #43A047;
   border-color: #4CAF50;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .custom-input-wrap {
@@ -88,23 +89,24 @@
 }
 
 .custom-input {
-  background: #f5f5f5;
-  border-radius: 12rpx;
-  padding: 20rpx 24rpx;
+  background: #f7f8fa;
+  border-radius: 16rpx;
+  padding: 22rpx 24rpx;
   font-size: 30rpx;
-  border: 2rpx solid #e0e0e0;
+  border: 2rpx solid #4CAF50;
 }
 
 .duration-result {
   margin-top: 20rpx;
-  padding: 16rpx 24rpx;
+  padding: 18rpx 24rpx;
   background-color: #FFF3E0;
-  border-radius: 12rpx;
+  border-radius: 14rpx;
 }
 
 .duration-result-text {
   font-size: 26rpx;
   color: #E65100;
+  font-weight: 500;
 }
 
 /* 照片区域 */
@@ -116,7 +118,7 @@
   position: relative;
   width: 240rpx;
   height: 240rpx;
-  border-radius: 16rpx;
+  border-radius: 20rpx;
   overflow: hidden;
 }
 
@@ -127,8 +129,8 @@
 
 .photo-remove {
   position: absolute;
-  top: 8rpx;
-  right: 8rpx;
+  top: 10rpx;
+  right: 10rpx;
   width: 44rpx;
   height: 44rpx;
   background: rgba(0, 0, 0, 0.5);
@@ -137,14 +139,14 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 24rpx;
+  font-size: 22rpx;
 }
 
 .photo-add {
   width: 240rpx;
   height: 240rpx;
-  border: 2rpx dashed #ccc;
-  border-radius: 16rpx;
+  border: 2rpx dashed #ddd;
+  border-radius: 20rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -153,33 +155,33 @@
 }
 
 .photo-add-icon {
-  font-size: 60rpx;
+  font-size: 56rpx;
   margin-bottom: 10rpx;
 }
 
 .photo-add-text {
   font-size: 24rpx;
-  color: #999;
+  color: #bbb;
 }
 
 /* 备注 */
 .note-input-wrap {
-  background: #f5f5f5;
-  border-radius: 12rpx;
+  background: #f7f8fa;
+  border-radius: 16rpx;
   padding: 4rpx;
 }
 
 .note-input {
   width: 100%;
   min-height: 120rpx;
-  padding: 20rpx;
+  padding: 22rpx;
   font-size: 28rpx;
   box-sizing: border-box;
 }
 
 /* 提交按钮 */
 .submit-area {
-  margin-top: 40rpx;
+  margin-top: 48rpx;
   padding-bottom: 40rpx;
 }
 
@@ -191,20 +193,21 @@
   justify-content: center;
   border-radius: 48rpx;
   font-size: 34rpx;
-  font-weight: bold;
+  font-weight: 600;
   color: #fff;
+  letter-spacing: 2rpx;
 }
 
 .submit-earn {
-  background: linear-gradient(135deg, #4CAF50, #66BB6A);
-  box-shadow: 0 6rpx 20rpx rgba(76, 175, 80, 0.3);
+  background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, 0.25);
 }
 
 .submit-spend {
-  background: linear-gradient(135deg, #ff5252, #ff7B7B);
-  box-shadow: 0 6rpx 20rpx rgba(255, 82, 82, 0.3);
+  background: linear-gradient(135deg, #FF7043 0%, #E64A19 100%);
+  box-shadow: 0 8rpx 24rpx rgba(255, 112, 67, 0.25);
 }
 
 .submit-btn-disabled {
-  opacity: 0.6;
+  opacity: 0.5;
 }

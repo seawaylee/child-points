@@ -10,21 +10,20 @@ exports.main = async (event, context) => {
   try {
     const userRes = await db.collection('users').doc(OPENID).get()
 
-    // User exists, update info
-    await db.collection('users').doc(OPENID).update({
-      data: {
-        nickName,
-        avatarUrl,
-        updatedAt: db.serverDate()
-      }
-    })
+    // User exists, update info if provided
+    if (nickName || avatarUrl) {
+      const updateData = { updatedAt: db.serverDate() }
+      if (nickName) updateData.nickName = nickName
+      if (avatarUrl) updateData.avatarUrl = avatarUrl
+      await db.collection('users').doc(OPENID).update({ data: updateData })
+    }
 
     return {
       code: 0,
       data: {
         ...userRes.data,
-        nickName,
-        avatarUrl
+        ...(nickName ? { nickName } : {}),
+        ...(avatarUrl ? { avatarUrl } : {})
       },
       msg: 'success'
     }
@@ -32,8 +31,8 @@ exports.main = async (event, context) => {
     // User does not exist, create new
     const newUser = {
       _id: OPENID,
-      nickName,
-      avatarUrl,
+      nickName: nickName || '新用户',
+      avatarUrl: avatarUrl || '',
       familyId: null,
       role: null,
       createdAt: db.serverDate(),

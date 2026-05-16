@@ -1,13 +1,14 @@
 /* 周统计 */
 .week-summary {
-  background: linear-gradient(135deg, #fff, #f9f9f9);
+  background: #fff;
   border-left: 6rpx solid #4CAF50;
 }
 
 .week-title {
-  font-size: 28rpx;
-  color: #666;
+  font-size: 26rpx;
+  color: #999;
   margin-bottom: 16rpx;
+  font-weight: 500;
 }
 
 .week-stats {
@@ -22,13 +23,13 @@
 
 .week-stat-label {
   font-size: 24rpx;
-  color: #999;
+  color: #aaa;
   margin-bottom: 8rpx;
 }
 
 .week-stat-value {
   font-size: 40rpx;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .week-earn {
@@ -36,13 +37,13 @@
 }
 
 .week-spend {
-  color: #ff5252;
+  color: #FF7043;
 }
 
 .week-stat-divider {
   width: 1rpx;
-  height: 60rpx;
-  background: #eee;
+  height: 56rpx;
+  background: #f0f0f0;
 }
 
 /* 日期分组头 */
@@ -54,13 +55,13 @@
 
 .date-text {
   font-size: 30rpx;
-  font-weight: bold;
+  font-weight: 600;
   color: #333;
 }
 
 .date-sub {
   font-size: 24rpx;
-  color: #999;
+  color: #aaa;
   margin-left: 16rpx;
 }
 
@@ -77,29 +78,6 @@
   flex: 1;
   overflow: hidden;
   min-width: 0;
-}
-
-.record-icon-wrap {
-  width: 72rpx;
-  height: 72rpx;
-  border-radius: 18rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 20rpx;
-  flex-shrink: 0;
-}
-
-.icon-earn {
-  background-color: #E8F5E9;
-}
-
-.icon-spend {
-  background-color: #FFEBEE;
-}
-
-.record-icon-text {
-  font-size: 36rpx;
 }
 
 .record-info {
@@ -126,17 +104,17 @@
 
 .record-operator {
   font-size: 22rpx;
-  color: #999;
+  color: #aaa;
 }
 
 .record-time {
   font-size: 22rpx;
-  color: #bbb;
+  color: #ccc;
 }
 
 .record-note {
   font-size: 22rpx;
-  color: #888;
+  color: #999;
   margin-top: 6rpx;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -151,7 +129,7 @@
 
 .record-points {
   font-size: 34rpx;
-  font-weight: bold;
+  font-weight: 700;
   min-width: 80rpx;
   text-align: right;
 }
@@ -161,13 +139,13 @@
 }
 
 .points-spend {
-  color: #ff5252;
+  color: #FF7043;
 }
 
 .record-photo {
   width: 72rpx;
   height: 72rpx;
-  border-radius: 10rpx;
+  border-radius: 12rpx;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -185,5 +163,5 @@
 
 .load-more-text {
   font-size: 24rpx;
-  color: #999;
+  color: #ccc;
 }
