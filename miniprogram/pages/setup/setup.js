@@ -28,7 +28,7 @@ Page({
       app.setUserInfo(result)
       wx.hideLoading()
 
-      wx.redirectTo({ url: '/pages/index/index' })
+      wx.switchTab({ url: '/pages/index/index' })
     } catch (err) {
       wx.hideLoading()
       wx.showToast({ title: '保存失败，请重试', icon: 'none' })

@@ -17,7 +17,9 @@ Page({
     formName: '',
     formType: 'earn',
     formIcon: '',
+    formTaskMode: 'duration',
     formPointsPerMinute: 1,
+    formPointsPerCount: 1,
     formEnabled: true,
     // 删除
     touchStartX: 0,
@@ -63,7 +65,9 @@ Page({
       formName: '',
       formType: 'earn',
       formIcon: '',
+      formTaskMode: 'duration',
       formPointsPerMinute: 1,
+      formPointsPerCount: 1,
       formEnabled: true
     })
   },
@@ -76,7 +80,9 @@ Page({
       formName: task.name || '',
       formType: task.type || 'earn',
       formIcon: task.icon || '',
+      formTaskMode: task.taskMode || 'duration',
       formPointsPerMinute: task.pointsPerMinute || 1,
+      formPointsPerCount: task.pointsPerCount || 1,
       formEnabled: task.enabled !== false
     })
   },
@@ -96,6 +102,13 @@ Page({
     }
   },
 
+  onFormTaskModeChange(e) {
+    const mode = e.currentTarget.dataset.mode
+    if (mode) {
+      this.setData({ formTaskMode: mode })
+    }
+  },
+
   onFormIconInput(e) {
     this.setData({ formIcon: e.detail.value })
   },
@@ -104,8 +117,12 @@ Page({
     this.setData({ formPointsPerMinute: parseFloat(e.detail.value) || 1 })
   },
 
+  onFormPPCInput(e) {
+    this.setData({ formPointsPerCount: parseFloat(e.detail.value) || 1 })
+  },
+
   async onSubmitForm() {
-    const { editTaskId, formName, formType, formIcon, formPointsPerMinute, formEnabled } = this.data
+    const { editTaskId, formName, formType, formIcon, formTaskMode, formPointsPerMinute, formPointsPerCount, formEnabled } = this.data
 
     if (!formName.trim()) {
       wx.showToast({ title: '请输入任务名称', icon: 'none' })
@@ -114,23 +131,26 @@ Page({
 
     wx.showLoading({ title: '保存中...' })
     try {
+      const taskData = {
+        name: formName.trim(),
+        type: formType,
+        icon: formIcon.trim(),
+        taskMode: formTaskMode,
+        pointsPerMinute: formTaskMode === 'duration' ? formPointsPerMinute : 0,
+        pointsPerCount: formTaskMode === 'count' ? formPointsPerCount : 0,
+        enabled: formEnabled
+      }
+
       if (editTaskId) {
         await cloud.callFunction('task', {
           action: 'update',
           taskId: editTaskId,
-          name: formName.trim(),
-          type: formType,
-          icon: formIcon.trim(),
-          pointsPerMinute: formPointsPerMinute,
-          enabled: formEnabled
+          ...taskData
         })
       } else {
         await cloud.callFunction('task', {
           action: 'add',
-          name: formName.trim(),
-          type: formType,
-          icon: formIcon.trim(),
-          pointsPerMinute: formPointsPerMinute
+          ...taskData
         })
       }
       wx.hideLoading()

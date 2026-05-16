@@ -5,8 +5,8 @@ const _ = db.command
 const MAX_LIMIT = 100
 
 // Action: add a new record
-async function addAction(OPENID, { taskId, taskName, taskType, minutes, photoFileId, note }) {
-  if (!taskId || !minutes) {
+async function addAction(OPENID, { taskId, taskName, taskType, minutes, count, photoFileId, note }) {
+  if (!taskId) {
     return { code: -1, msg: '缺少必要参数' }
   }
 
@@ -14,7 +14,18 @@ async function addAction(OPENID, { taskId, taskName, taskType, minutes, photoFil
   const taskRes = await db.collection('tasks').doc(taskId).get()
   const task = taskRes.data
 
-  let points = minutes * task.pointsPerMinute
+  const taskMode = task.taskMode || 'duration'
+  let points = 0
+  let recordMinutes = minutes || 0
+  let recordCount = count || 0
+
+  if (taskMode === 'count') {
+    recordCount = recordCount || 1
+    points = recordCount * (task.pointsPerCount || 1)
+  } else {
+    recordMinutes = recordMinutes || 1
+    points = recordMinutes * (task.pointsPerMinute || 1)
+  }
 
   // If it's a spend type, make points negative
   if (taskType === 'spend' || task.type === 'spend') {
@@ -30,7 +41,9 @@ async function addAction(OPENID, { taskId, taskName, taskType, minutes, photoFil
     taskId,
     taskName: taskName || task.name,
     taskType: taskType || task.type,
-    minutes,
+    taskMode,
+    minutes: recordMinutes,
+    count: recordCount,
     points,
     photoFileId: photoFileId || '',
     note: note || '',

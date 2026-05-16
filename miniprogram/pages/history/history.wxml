@@ -58,9 +58,10 @@
           class="record-photo"
           wx:if="{{record.photoFileId}}"
           data-fileid="{{record.photoFileId}}"
+          data-url="{{record.photoUrl}}"
           bindtap="onPreviewPhoto"
         >
-          <image class="photo-thumb" src="{{record.photoFileId}}" mode="aspectFill" />
+          <image class="photo-thumb" src="{{record.photoUrl || record.photoFileId}}" mode="aspectFill" />
         </view>
       </view>
     </view>

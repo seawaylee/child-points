@@ -70,6 +70,23 @@ Page({
         pointsText: r.taskType === 'earn' ? `+${r.points}` : `${r.points}`
       }))
 
+      // 批量转换照片 fileID 为临时 URL
+      const fileIds = records.filter(r => r.photoFileId).map(r => r.photoFileId)
+      if (fileIds.length > 0) {
+        try {
+          const urlRes = await wx.cloud.getTempFileURL({ fileList: fileIds })
+          const urlMap = {}
+          urlRes.fileList.forEach(f => { urlMap[f.fileID] = f.tempFileURL })
+          records.forEach(r => {
+            if (r.photoFileId && urlMap[r.photoFileId]) {
+              r.photoUrl = urlMap[r.photoFileId]
+            }
+          })
+        } catch (e) {
+          console.error('获取照片链接失败', e)
+        }
+      }
+
       const grouped = this.groupByDate(records)
       const allGrouped = page === 1 ? grouped : this.mergeGroups(this.data.groupedRecords, grouped)
 
@@ -119,13 +136,15 @@ Page({
   },
 
   onPreviewPhoto(e) {
-    const { fileid } = e.currentTarget.dataset
-    if (fileid) {
+    const { fileid, url } = e.currentTarget.dataset
+    if (url) {
+      wx.previewImage({ current: url, urls: [url] })
+    } else if (fileid) {
       wx.cloud.getTempFileURL({
         fileList: [fileid],
         success: res => {
-          const url = res.fileList[0].tempFileURL
-          wx.previewImage({ current: url, urls: [url] })
+          const tempUrl = res.fileList[0].tempFileURL
+          wx.previewImage({ current: tempUrl, urls: [tempUrl] })
         }
       })
     }

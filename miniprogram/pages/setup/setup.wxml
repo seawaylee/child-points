@@ -34,7 +34,7 @@
         bindinput="onInput"
       />
     </view>
-    <view class="setup-btn {{nickName.trim() ? '' : 'setup-btn-disabled'}}" bindtap="onSubmit">
+    <view class="setup-btn {{nickName ? '' : 'setup-btn-disabled'}}" bindtap="onSubmit">
       开始使用
     </view>
   </view>

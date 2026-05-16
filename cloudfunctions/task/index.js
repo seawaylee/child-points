@@ -45,7 +45,7 @@ async function listAllAction({ familyId }) {
 }
 
 // Action: add a new task (admin only)
-async function addAction(OPENID, { familyId, name, type, pointsPerMinute, icon }) {
+async function addAction(OPENID, { familyId, name, type, pointsPerMinute, pointsPerCount, icon, taskMode }) {
   if (!familyId || !name || !type) {
     return { code: -1, msg: '缺少必要参数' }
   }
@@ -69,7 +69,9 @@ async function addAction(OPENID, { familyId, name, type, pointsPerMinute, icon }
     familyId,
     name,
     type,
-    pointsPerMinute: pointsPerMinute || 1,
+    taskMode: taskMode || 'duration',
+    pointsPerMinute: taskMode === 'count' ? 0 : (pointsPerMinute || 1),
+    pointsPerCount: taskMode === 'count' ? (pointsPerCount || 1) : 0,
     icon: icon || '',
     enabled: true,
     sortOrder: maxSortOrder,
@@ -86,7 +88,7 @@ async function addAction(OPENID, { familyId, name, type, pointsPerMinute, icon }
 }
 
 // Action: update a task (admin only)
-async function updateAction(OPENID, { taskId, name, type, pointsPerMinute, icon, enabled }) {
+async function updateAction(OPENID, { taskId, name, type, pointsPerMinute, pointsPerCount, icon, enabled, taskMode }) {
   if (!taskId) {
     return { code: -1, msg: '缺少taskId' }
   }
@@ -99,7 +101,9 @@ async function updateAction(OPENID, { taskId, name, type, pointsPerMinute, icon,
   const updateData = {}
   if (name !== undefined) updateData.name = name
   if (type !== undefined) updateData.type = type
+  if (taskMode !== undefined) updateData.taskMode = taskMode
   if (pointsPerMinute !== undefined) updateData.pointsPerMinute = pointsPerMinute
+  if (pointsPerCount !== undefined) updateData.pointsPerCount = pointsPerCount
   if (icon !== undefined) updateData.icon = icon
   if (enabled !== undefined) updateData.enabled = enabled
 
@@ -170,7 +174,7 @@ exports.main = async (event, context) => {
         if (user.role !== 'admin') return { code: -1, msg: '仅管理员可查看全部任务' }
         return await listAllAction({ familyId })
       case 'add':
-        return await addAction(OPENID, { familyId, name: event.name, type: event.type, pointsPerMinute: event.pointsPerMinute, icon: event.icon })
+        return await addAction(OPENID, { familyId, name: event.name, type: event.type, pointsPerMinute: event.pointsPerMinute, pointsPerCount: event.pointsPerCount, icon: event.icon, taskMode: event.taskMode })
       case 'update':
         return await updateAction(OPENID, event)
       case 'delete':

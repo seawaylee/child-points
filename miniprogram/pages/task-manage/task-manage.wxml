@@ -41,7 +41,7 @@
                 <view class="task-item-name">{{item.name}}</view>
                 <view class="task-item-meta flex-row">
                   <text class="tag-earn">赚积分</text>
-                  <text class="task-item-ppm">{{item.pointsPerMinute || 1}}分/分钟</text>
+                  <text class="task-item-ppm">{{item.taskMode === 'count' ? (item.pointsPerCount || 1) + '分/次' : (item.pointsPerMinute || 1) + '分/分钟'}}分/分钟</text>
                 </view>
               </view>
               <view class="task-toggle" catchtap="onToggleEnabled" data-task-id="{{item._id}}" data-enabled="{{item.enabled !== false}}">
@@ -88,7 +88,7 @@
                 <view class="task-item-name">{{item.name}}</view>
                 <view class="task-item-meta flex-row">
                   <text class="tag-spend">花积分</text>
-                  <text class="task-item-ppm">{{item.pointsPerMinute || 1}}分/分钟</text>
+                  <text class="task-item-ppm">{{item.taskMode === 'count' ? (item.pointsPerCount || 1) + '分/次' : (item.pointsPerMinute || 1) + '分/分钟'}}分/分钟</text>
                 </view>
               </view>
               <view class="task-toggle" catchtap="onToggleEnabled" data-task-id="{{item._id}}" data-enabled="{{item.enabled !== false}}">
@@ -164,6 +164,28 @@
       </view>
 
       <view class="form-group">
+        <view class="form-label">计分方式</view>
+        <view class="type-selector flex-row">
+          <view
+            class="type-option {{formTaskMode === 'duration' ? 'type-selected type-earn' : ''}}"
+            data-mode="duration"
+            bindtap="onFormTaskModeChange"
+          >
+            <view class="custom-radio {{formTaskMode === 'duration' ? 'radio-earn' : ''}}"></view>
+            <text>时长类</text>
+          </view>
+          <view
+            class="type-option {{formTaskMode === 'count' ? 'type-selected type-spend' : ''}}"
+            data-mode="count"
+            bindtap="onFormTaskModeChange"
+          >
+            <view class="custom-radio {{formTaskMode === 'count' ? 'radio-spend' : ''}}"></view>
+            <text>次数类</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-group" wx:if="{{formTaskMode === 'duration'}}">
         <view class="form-label">每分钟积分数</view>
         <input
           class="form-control"
@@ -171,6 +193,17 @@
           placeholder="1"
           value="{{formPointsPerMinute}}"
           bindinput="onFormPPMInput"
+        />
+      </view>
+
+      <view class="form-group" wx:if="{{formTaskMode === 'count'}}">
+        <view class="form-label">每次积分数</view>
+        <input
+          class="form-control"
+          type="digit"
+          placeholder="1"
+          value="{{formPointsPerCount}}"
+          bindinput="onFormPPCInput"
         />
       </view>
 

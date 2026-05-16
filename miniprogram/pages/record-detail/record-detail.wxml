@@ -10,13 +10,14 @@
         <text class="{{task.type === 'earn' ? 'tag-earn' : 'tag-spend'}}">
           {{task.type === 'earn' ? '赚积分' : '花积分'}}
         </text>
-        <text class="task-ppm" wx:if="{{task.pointsPerMinute}}">{{task.pointsPerMinute}}分/分钟</text>
+        <text class="task-ppm" wx:if="{{task.taskMode === 'count'}}">{{task.pointsPerCount || 1}}分/次</text>
+        <text class="task-ppm" wx:elif="{{task.pointsPerMinute}}">{{task.pointsPerMinute}}分/分钟</text>
       </view>
     </view>
   </view>
 
-  <!-- 时长选择 -->
-  <view class="section">
+  <!-- 时长选择（时长类） -->
+  <view class="section" wx:if="{{task.taskMode !== 'count'}}">
     <view class="section-label">选择时长（分钟）</view>
     <view class="duration-grid">
       <view
@@ -49,6 +50,44 @@
     <view class="duration-result" wx:if="{{selectedDuration > 0}}">
       <text class="duration-result-text">
         已选 {{selectedDuration}} 分钟 = {{selectedDuration * (task.pointsPerMinute || 1)}} 积分
+      </text>
+    </view>
+  </view>
+
+  <!-- 次数选择（次数类） -->
+  <view class="section" wx:if="{{task.taskMode === 'count'}}">
+    <view class="section-label">选择次数</view>
+    <view class="duration-grid">
+      <view
+        class="duration-btn {{selectedCount === item ? 'duration-active' : ''}}"
+        wx:for="{{countPresets}}"
+        wx:key="*this"
+        data-count="{{item}}"
+        bindtap="onCountTap"
+      >
+        {{item}}次
+      </view>
+      <view
+        class="duration-btn {{showCustomCountInput ? 'duration-active' : ''}}"
+        bindtap="onCustomCountToggle"
+      >
+        自定义
+      </view>
+    </view>
+    <!-- 自定义输入 -->
+    <view class="custom-input-wrap" wx:if="{{showCustomCountInput}}">
+      <input
+        class="custom-input"
+        type="number"
+        placeholder="输入次数"
+        value="{{customCount}}"
+        bindinput="onCustomCountInput"
+      />
+    </view>
+    <!-- 已选次数提示 -->
+    <view class="duration-result" wx:if="{{selectedCount > 0}}">
+      <text class="duration-result-text">
+        已选 {{selectedCount}} 次 = {{selectedCount * (task.pointsPerCount || 1)}} 积分
       </text>
     </view>
   </view>

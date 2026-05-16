@@ -50,8 +50,10 @@
           data-task-id="{{item._id}}"
           bindtap="onTaskTap"
         >
-          <view class="task-icon">{{item.emoji || '⭐'}}</view>
-          <view class="task-name">{{item.name}}</view>
+          <view class="task-card-inner">
+            <view class="task-icon">{{item.emoji || '⭐'}}</view>
+            <view class="task-name">{{item.name}}</view>
+          </view>
         </view>
       </view>
     </view>
@@ -67,8 +69,10 @@
           data-task-id="{{item._id}}"
           bindtap="onTaskTap"
         >
-          <view class="task-icon">{{item.emoji || '⭐'}}</view>
-          <view class="task-name">{{item.name}}</view>
+          <view class="task-card-inner">
+            <view class="task-icon">{{item.emoji || '⭐'}}</view>
+            <view class="task-name">{{item.name}}</view>
+          </view>
         </view>
       </view>
     </view>

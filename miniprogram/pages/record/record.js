@@ -29,7 +29,7 @@ Page({
   async loadTasks() {
     try {
       this.setData({ loading: true })
-      const tasks = (await cloud.callFunction('task', { action: 'list' }) || []).map(t => ({ ...t, emoji: ICON_MAP[t.icon] || '⭐' }))
+      const tasks = (await cloud.callFunction('task', { action: 'list' }) || []).map(t => ({ ...t, emoji: ICON_MAP[t.icon] || t.icon || '⭐' }))
       const earnTasks = tasks.filter(t => t.type === 'earn')
       const spendTasks = tasks.filter(t => t.type === 'spend')
       this.setData({

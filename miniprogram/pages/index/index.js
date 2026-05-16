@@ -86,8 +86,8 @@ Page({
   async loadTasks() {
     try {
       const tasks = await cloud.callFunction('task', { action: 'list' })
-      const earnTasks = (tasks || []).filter(t => t.type === 'earn').map(t => ({ ...t, emoji: ICON_MAP[t.icon] || '⭐' }))
-      const spendTasks = (tasks || []).filter(t => t.type === 'spend').map(t => ({ ...t, emoji: ICON_MAP[t.icon] || '⭐' }))
+      const earnTasks = (tasks || []).filter(t => t.type === 'earn').map(t => ({ ...t, emoji: ICON_MAP[t.icon] || t.icon || '⭐' }))
+      const spendTasks = (tasks || []).filter(t => t.type === 'spend').map(t => ({ ...t, emoji: ICON_MAP[t.icon] || t.icon || '⭐' }))
       this.setData({ earnTasks, spendTasks })
     } catch (err) {
       console.error('加载任务失败', err)

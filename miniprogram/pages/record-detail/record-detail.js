@@ -6,11 +6,16 @@ Page({
     taskId: '',
     task: null,
     loading: true,
-    // 时长选择
+    // 时长选择（时长类）
     durationPresets: [5, 10, 15, 30, 60],
     selectedDuration: 0,
     customDuration: '',
     showCustomInput: false,
+    // 次数选择（次数类）
+    countPresets: [1, 2, 3, 5, 10],
+    selectedCount: 0,
+    customCount: '',
+    showCustomCountInput: false,
     // 照片
     photoPath: '',
     photoUploaded: false,
@@ -51,7 +56,7 @@ Page({
     }
   },
 
-  // 时长选择
+  // 时长选择（时长类）
   onDurationTap(e) {
     const { duration } = e.currentTarget.dataset
     this.setData({
@@ -76,6 +81,31 @@ Page({
     })
   },
 
+  // 次数选择（次数类）
+  onCountTap(e) {
+    const { count } = e.currentTarget.dataset
+    this.setData({
+      selectedCount: count,
+      customCount: '',
+      showCustomCountInput: false
+    })
+  },
+
+  onCustomCountToggle() {
+    this.setData({
+      showCustomCountInput: !this.data.showCustomCountInput,
+      selectedCount: 0
+    })
+  },
+
+  onCustomCountInput(e) {
+    const val = e.detail.value
+    this.setData({
+      customCount: val,
+      selectedCount: parseInt(val) || 0
+    })
+  },
+
   // 照片
   onTakePhoto() {
     wx.chooseMedia({
@@ -84,9 +114,23 @@ Page({
       sourceType: ['camera', 'album'],
       success: (res) => {
         const tempFilePath = res.tempFiles[0].tempFilePath
-        this.setData({
-          photoPath: tempFilePath,
-          photoUploaded: false
+        // 压缩图片
+        wx.compressImage({
+          src: tempFilePath,
+          quality: 60,
+          success: (compressRes) => {
+            this.setData({
+              photoPath: compressRes.tempFilePath,
+              photoUploaded: false
+            })
+          },
+          fail: () => {
+            // 压缩失败用原图
+            this.setData({
+              photoPath: tempFilePath,
+              photoUploaded: false
+            })
+          }
         })
       },
       fail: () => {
@@ -117,7 +161,7 @@ Page({
 
   // 提交
   async onSubmit() {
-    const { task, selectedDuration, photoPath, note, submitting } = this.data
+    const { task, selectedDuration, selectedCount, photoPath, note, submitting } = this.data
 
     if (submitting) return
 
@@ -126,9 +170,18 @@ Page({
       return
     }
 
-    if (!selectedDuration || selectedDuration <= 0) {
-      wx.showToast({ title: '请选择或输入时长', icon: 'none' })
-      return
+    const taskMode = task.taskMode || 'duration'
+
+    if (taskMode === 'count') {
+      if (!selectedCount || selectedCount <= 0) {
+        wx.showToast({ title: '请选择或输入次数', icon: 'none' })
+        return
+      }
+    } else {
+      if (!selectedDuration || selectedDuration <= 0) {
+        wx.showToast({ title: '请选择或输入时长', icon: 'none' })
+        return
+      }
     }
 
     this.setData({ submitting: true })
@@ -146,19 +199,23 @@ Page({
         photoFileId = uploadRes.fileID
       }
 
-      // 计算积分
-      const points = selectedDuration * (task.pointsPerMinute || 1)
-
       // 提交记录
-      await cloud.callFunction('record', {
+      const recordData = {
         action: 'add',
         taskId: task._id,
         taskName: task.name,
         taskType: task.type,
-        minutes: selectedDuration,
         photoFileId: photoFileId,
         note: note
-      })
+      }
+
+      if (taskMode === 'count') {
+        recordData.count = selectedCount
+      } else {
+        recordData.minutes = selectedDuration
+      }
+
+      await cloud.callFunction('record', recordData)
 
       wx.hideLoading()
       wx.showToast({
