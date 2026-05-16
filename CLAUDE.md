@@ -46,7 +46,23 @@
   .item { margin: 0 10rpx 20rpx; }
   ```
 
+- **`calc()` 混合百分比和 rpx 不可靠**：`calc(33.33% - 16rpx)` 在不同机型上表现不一致，会导致布局溢出。用纯百分比宽度 + `box-sizing: border-box` + `padding` 替代：
+  ```css
+  /* 错误 */
+  .item { width: calc(33.33% - 16rpx); margin: 0 8rpx; }
+  /* 正确 */
+  .item { width: 33.33%; box-sizing: border-box; padding: 0 8rpx; }
+  ```
+
 - **伪元素拦截触摸事件**：`.points-card` 使用 `::before`/`::after` 配合 `position: relative` + `overflow: hidden` 会导致子元素的 `bindtap` 失效。移除伪元素后恢复正常。
+
+- **事件冒泡用 `catchtap` 而非 `bindtap`**：在卡片内部有按钮时，外层用 `bindtap` 做卡片点击，内部按钮用 `catchtap` 阻止冒泡。但注意 `catchtap=""` 空字符串会报错，必须绑定一个实际存在的方法名。
+
+### 布局模式
+
+- **多列网格**：用 `flex` + `百分比宽度` + `box-sizing: border-box` 是最可靠的方案。不要用 `calc()` 混合单位。
+- **滑动删除**：结构为外层 `position: relative; overflow: hidden`，删除按钮 `position: absolute` 定位，滑动内容 `position: relative; z-index: 1` 通过 `transform: translateX` 实现。删除按钮是滑动内容的兄弟元素，不是子元素，否则会覆盖卡片内的交互元素。
+- **卡片内嵌套可点击区域**：确保外层和内层的点击事件不冲突，用 `catchtap` 阻止内层事件冒泡到外层。
 
 ### 数据模型
 
@@ -61,9 +77,19 @@
   ```
   WXML 使用 `{{item.emoji}}` 而非 `{{item.icon}}`。
 
+  注意：新增任务时允许用户自定义 emoji 图标，此时 `icon` 字段直接存 emoji 字符串，不需要走 ICON_MAP 映射。兼容逻辑：`item.emoji || ICON_MAP[item.icon] || '⭐'`。
+
+- **数据隔离**：所有业务数据通过 `familyId` 隔离。每个用户的 `users` 表记录绑定一个 `familyId`，所有查询（任务、记录、统计）都以此为过滤条件。不同家庭的数据完全隔离，可安全分享给多个家庭使用。
+
+- **余额计算**：余额 = 所有记录的 `points` 字段求和。赚积分为正数，花积分为负数。删除记录即回滚积分，不需要额外的余额字段维护。
+
 ### 事件处理
 
 - **`catchtap=""` 空字符串会出问题**：部分基础库版本下 `catchtap=""`（空 handler 名）会导致异常。改为 `catchtap="onPreventBubble"` 并在 JS 中定义空方法。
+
+- **长按事件**：`bindlongpress` 用于触发上下文菜单（如删除、撤销），配合 `wx.showModal` 做二次确认。
+
+- **触摸事件与滑动**：`bindtouchstart` / `bindtouchend` 获取触摸位置，手动计算滑动方向和距离。微信小程序没有原生的滑动组件，需要自行实现。
 
 ### Tab Bar 图标
 
@@ -91,6 +117,16 @@
 
 - 修改云函数代码后需要通过微信开发者 IDE 重新上传部署，本地改动不会自动生效
 - `cloud.callFunction` 返回的是 `result.result`，注意在封装层处理
+- **miniprogram/ 目录的改动不需要部署**，开发者工具编译即可生效
+- **云函数参数解构要注意作用域**：`updateAction(OPENID, { name, childName, monthlyAllowance })` 中如果直接引用 `event.monthlyAllowance` 会是 undefined，必须从参数解构中取值
+- **switch-case 要覆盖所有 action**：新增前端调用的 action 必须在 cloud function 的 switch 中注册，否则返回"未知的操作类型"。常见遗漏：`leave`、`delete` 等。
+
+### 权限模型
+
+- **admin / member 双角色**：`users` 表的 `role` 字段，创建者为 `admin`，加入者为 `member`
+- **权限校验在云函数**：所有管理操作（update family、manage tasks、change role、remove member）都在云函数层校验 `user.role === 'admin'`，前端只做 UI 层的显示/隐藏
+- **管理员不能修改自己角色**：`changeRole` action 中校验 `memberId !== OPENID`，防止全家无 admin 的局面
+- **记录删除权限**：记录创建者可删除自己的记录，admin 可删除任何人的记录
 
 ## 换电脑开发指南
 
