@@ -141,7 +141,15 @@
     <view class="card">
       <view class="card-section-title">家庭成员</view>
       <view class="member-list">
-        <view class="member-item flex-row" wx:for="{{members}}" wx:key="_id">
+        <view
+          class="member-item flex-row {{isAdmin && item.role !== 'admin' ? 'member-item-tap' : ''}}"
+          wx:for="{{members}}"
+          wx:key="_id"
+          data-member-id="{{item._id}}"
+          data-member-name="{{item.nickName}}"
+          data-member-role="{{item.role}}"
+          bindtap="{{isAdmin && item.role !== 'admin' ? 'onChangeRole' : ''}}"
+        >
           <view class="member-avatar">
             <image
               wx:if="{{item.avatarUrl}}"
@@ -157,6 +165,7 @@
           <view class="member-role {{item.role === 'admin' ? 'role-admin' : 'role-member'}}">
             {{item.role === 'admin' ? '管理员' : '成员'}}
           </view>
+          <text wx:if="{{isAdmin && item.role !== 'admin'}}" class="member-role-arrow">›</text>
         </view>
       </view>
       <view wx:if="{{members.length === 0}}" class="empty-hint">暂无成员</view>

@@ -5,12 +5,30 @@
   </view>
 
   <!-- 无家庭状态 -->
-  <view wx:elif="{{!hasFamily}}" class="empty-state">
-    <view class="empty-icon">🏠</view>
-    <view class="empty-text">还没有加入家庭</view>
-    <view class="empty-text" style="margin-top:10rpx;margin-bottom:60rpx;">创建或加入一个家庭开始使用</view>
-    <view class="btn-primary" style="margin-bottom:24rpx;" bindtap="onCreateFamily">创建家庭</view>
-    <view class="btn-primary btn-secondary" bindtap="onJoinFamily">加入家庭</view>
+  <view wx:elif="{{!hasFamily}}" class="welcome-wrap">
+    <view class="welcome-hero">
+      <view class="welcome-emoji">🏠</view>
+      <view class="welcome-title">积分小管家</view>
+      <view class="welcome-desc">让孩子养成好习惯，用好行为赚取奖励时间</view>
+    </view>
+    <view class="welcome-actions">
+      <view class="welcome-card" bindtap="onCreateFamily">
+        <view class="welcome-card-icon">✨</view>
+        <view class="welcome-card-body">
+          <view class="welcome-card-title">创建家庭</view>
+          <view class="welcome-card-sub">创建新家庭，设定任务和积分规则</view>
+        </view>
+        <text class="welcome-card-arrow">›</text>
+      </view>
+      <view class="welcome-card welcome-card-join" bindtap="onJoinFamily">
+        <view class="welcome-card-icon">🤝</view>
+        <view class="welcome-card-body">
+          <view class="welcome-card-title">加入家庭</view>
+          <view class="welcome-card-sub">输入邀请码，加入已有的家庭</view>
+        </view>
+        <text class="welcome-card-arrow">›</text>
+      </view>
+    </view>
   </view>
 
   <!-- 有家庭状态 -->

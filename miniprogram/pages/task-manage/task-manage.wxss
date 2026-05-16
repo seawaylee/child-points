@@ -36,27 +36,6 @@
   margin-bottom: 12rpx;
 }
 
-.task-swipe-content {
-  display: flex;
-  flex-direction: row;
-  transition: transform 0.2s ease;
-  position: relative;
-}
-
-.task-swipe-content.swiped {
-  transform: translateX(-140rpx);
-}
-
-.task-manage-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-  min-width: 100%;
-  padding: 24rpx;
-  margin-bottom: 0;
-}
-
 .task-swipe-action {
   position: absolute;
   right: 0;
@@ -74,6 +53,24 @@
   color: #fff;
   font-size: 28rpx;
   font-weight: 600;
+}
+
+.task-swipe-content {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s ease;
+}
+
+.task-swipe-content.swiped {
+  transform: translateX(-140rpx);
+}
+
+.task-manage-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 24rpx;
+  margin-bottom: 0;
 }
 
 /* 任务项 */

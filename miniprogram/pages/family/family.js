@@ -297,5 +297,74 @@ Page({
 
   onCancelEditAllowance() {
     this.setData({ editingAllowance: false })
+  },
+
+  // === 修改成员角色 ===
+  onChangeRole(e) {
+    const { memberId, memberName, memberRole } = e.currentTarget.dataset
+    const items = ['设为管理员', '移除成员']
+
+    wx.showActionSheet({
+      itemList: items,
+      success: (res) => {
+        if (res.tapIndex === 0) {
+          // 设为管理员
+          wx.showModal({
+            title: '确认操作',
+            content: `确定将「${memberName}」设为管理员吗？`,
+            success: async (modalRes) => {
+              if (modalRes.confirm) {
+                await this.doChangeRole(memberId, 'admin')
+              }
+            }
+          })
+        } else if (res.tapIndex === 1) {
+          // 移除成员
+          wx.showModal({
+            title: '确认移除',
+            content: `确定将「${memberName}」移出家庭吗？`,
+            confirmColor: '#ff5252',
+            success: async (modalRes) => {
+              if (modalRes.confirm) {
+                await this.doRemoveMember(memberId, memberName)
+              }
+            }
+          })
+        }
+      }
+    })
+  },
+
+  async doChangeRole(memberId, role) {
+    wx.showLoading({ title: '操作中...' })
+    try {
+      await cloud.callFunction('family', {
+        action: 'changeRole',
+        memberId,
+        role
+      })
+      wx.hideLoading()
+      wx.showToast({ title: '角色已更新', icon: 'success' })
+      this.loadFamilyInfo()
+    } catch (err) {
+      wx.hideLoading()
+      wx.showToast({ title: '操作失败', icon: 'none' })
+    }
+  },
+
+  async doRemoveMember(memberId, memberName) {
+    wx.showLoading({ title: '移除中...' })
+    try {
+      await cloud.callFunction('family', {
+        action: 'removeMember',
+        memberId
+      })
+      wx.hideLoading()
+      wx.showToast({ title: '已移除', icon: 'success' })
+      this.loadFamilyInfo()
+    } catch (err) {
+      wx.hideLoading()
+      wx.showToast({ title: '操作失败', icon: 'none' })
+    }
   }
 })

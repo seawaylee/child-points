@@ -193,8 +193,134 @@ async function getAction(OPENID) {
   }
 }
 
+// Action: leave family
+async function leaveAction(OPENID) {
+  const userRes = await db.collection('users').doc(OPENID).get()
+  const user = userRes.data
+
+  if (!user.familyId) {
+    return { code: -1, msg: '您尚未加入任何家庭' }
+  }
+
+  const familyRes = await db.collection('families').doc(user.familyId).get()
+  const family = familyRes.data
+
+  // Remove user from family members
+  await db.collection('families').doc(user.familyId).update({
+    data: {
+      members: _.pull(OPENID),
+      updatedAt: db.serverDate()
+    }
+  })
+
+  // Clear user's family info
+  await db.collection('users').doc(OPENID).update({
+    data: {
+      familyId: '',
+      role: 'member',
+      updatedAt: db.serverDate()
+    }
+  })
+
+  return { code: 0, data: null, msg: 'success' }
+}
+
+// Action: change member role (admin only)
+async function changeRoleAction(OPENID, { memberId, role }) {
+  if (!memberId || !role) {
+    return { code: -1, msg: '缺少必要参数' }
+  }
+
+  if (!['admin', 'member'].includes(role)) {
+    return { code: -1, msg: '无效的角色' }
+  }
+
+  const userRes = await db.collection('users').doc(OPENID).get()
+  const user = userRes.data
+
+  if (!user.familyId) {
+    return { code: -1, msg: '您尚未加入任何家庭' }
+  }
+
+  if (user.role !== 'admin') {
+    return { code: -1, msg: '仅管理员可以修改角色' }
+  }
+
+  // Cannot change own role
+  if (memberId === OPENID) {
+    return { code: -1, msg: '不能修改自己的角色' }
+  }
+
+  // Verify target user is in the same family
+  const targetRes = await db.collection('users').doc(memberId).get()
+  const target = targetRes.data
+
+  if (target.familyId !== user.familyId) {
+    return { code: -1, msg: '该用户不在您的家庭中' }
+  }
+
+  // Update target user's role
+  await db.collection('users').doc(memberId).update({
+    data: {
+      role,
+      updatedAt: db.serverDate()
+    }
+  })
+
+  return { code: 0, data: { memberId, role }, msg: 'success' }
+}
+
+// Action: remove member from family (admin only)
+async function removeMemberAction(OPENID, { memberId }) {
+  if (!memberId) {
+    return { code: -1, msg: '缺少必要参数' }
+  }
+
+  const userRes = await db.collection('users').doc(OPENID).get()
+  const user = userRes.data
+
+  if (!user.familyId) {
+    return { code: -1, msg: '您尚未加入任何家庭' }
+  }
+
+  if (user.role !== 'admin') {
+    return { code: -1, msg: '仅管理员可以移除成员' }
+  }
+
+  if (memberId === OPENID) {
+    return { code: -1, msg: '不能移除自己，请使用退出功能' }
+  }
+
+  // Verify target user is in the same family
+  const targetRes = await db.collection('users').doc(memberId).get()
+  const target = targetRes.data
+
+  if (target.familyId !== user.familyId) {
+    return { code: -1, msg: '该用户不在您的家庭中' }
+  }
+
+  // Remove from family members array
+  await db.collection('families').doc(user.familyId).update({
+    data: {
+      members: _.pull(memberId),
+      updatedAt: db.serverDate()
+    }
+  })
+
+  // Clear target user's family info
+  await db.collection('users').doc(memberId).update({
+    data: {
+      familyId: '',
+      role: 'member',
+      updatedAt: db.serverDate()
+    }
+  })
+
+  return { code: 0, data: null, msg: 'success' }
+}
+
 // Action: update family info (admin only)
-async function updateAction(OPENID, { name, childName, childAvatar }) {
+async function updateAction(OPENID, { name, childName, childAvatar, monthlyAllowance }) {
   const userRes = await db.collection('users').doc(OPENID).get()
   const user = userRes.data
 
@@ -210,7 +336,7 @@ async function updateAction(OPENID, { name, childName, childAvatar }) {
   if (name !== undefined) updateData.name = name
   if (childName !== undefined) updateData.childName = childName
   if (childAvatar !== undefined) updateData.childAvatar = childAvatar
-  if (event.monthlyAllowance !== undefined) updateData.monthlyAllowance = event.monthlyAllowance
+  if (monthlyAllowance !== undefined) updateData.monthlyAllowance = monthlyAllowance
 
   await db.collection('families').doc(user.familyId).update({
     data: updateData
@@ -313,6 +439,12 @@ exports.main = async (event, context) => {
         return await getInviteCodeAction(OPENID)
       case 'checkAllowance':
         return await checkAllowanceAction(OPENID)
+      case 'leave':
+        return await leaveAction(OPENID)
+      case 'changeRole':
+        return await changeRoleAction(OPENID, event)
+      case 'removeMember':
+        return await removeMemberAction(OPENID, event)
       default:
         return { code: -1, msg: '未知的操作类型' }
     }

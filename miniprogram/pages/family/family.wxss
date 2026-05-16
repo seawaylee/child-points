@@ -170,6 +170,22 @@
   border-bottom: none;
 }
 
+.member-item-tap {
+  padding-right: 8rpx;
+}
+
+.member-item-tap:active {
+  background-color: #f9f9f9;
+  border-radius: 12rpx;
+}
+
+.member-role-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+  margin-left: 8rpx;
+  font-weight: 300;
+}
+
 .member-avatar {
   width: 72rpx;
   height: 72rpx;
