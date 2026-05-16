@@ -46,6 +46,26 @@
   background: #f0f0f0;
 }
 
+/* 操作提示 */
+.record-tip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx 0;
+  margin-bottom: 8rpx;
+}
+
+.record-tip-icon {
+  font-size: 24rpx;
+  margin-right: 8rpx;
+}
+
+.record-tip-text {
+  font-size: 22rpx;
+  color: #bbb;
+}
+
 /* 日期分组头 */
 .date-header {
   display: flex;

@@ -148,5 +148,39 @@ Page({
         }
       })
     }
+  },
+
+  onLongPressRecord(e) {
+    const { recordId, taskName, points, pointsText, taskType } = e.currentTarget.dataset
+    const absPoints = Math.abs(points)
+    const action = taskType === 'earn' ? '扣除' : '返还'
+
+    wx.showModal({
+      title: '撤销记录',
+      content: `撤销「${taskName}」${pointsText}？将${action} ${absPoints} 积分`,
+      confirmColor: '#ff5252',
+      confirmText: '撤销',
+      success: async (res) => {
+        if (res.confirm) {
+          await this.doDeleteRecord(recordId)
+        }
+      }
+    })
+  },
+
+  async doDeleteRecord(recordId) {
+    wx.showLoading({ title: '撤销中...' })
+    try {
+      await cloud.callFunction('record', {
+        action: 'delete',
+        recordId
+      })
+      wx.hideLoading()
+      wx.showToast({ title: '已撤销', icon: 'success' })
+      this.refreshRecords()
+    } catch (err) {
+      wx.hideLoading()
+      wx.showToast({ title: '撤销失败', icon: 'none' })
+    }
   }
 })

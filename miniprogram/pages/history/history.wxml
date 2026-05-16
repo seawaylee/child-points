@@ -15,6 +15,12 @@
     </view>
   </view>
 
+  <!-- 操作提示 -->
+  <view class="record-tip" wx:if="{{groupedRecords.length > 0}}">
+    <text class="record-tip-icon">💡</text>
+    <text class="record-tip-text">长按记录可撤销并回滚积分</text>
+  </view>
+
   <!-- 加载状态 -->
   <view wx:if="{{loading && groupedRecords.length === 0}}" class="empty-state">
     <view class="empty-text">加载中...</view>
@@ -39,6 +45,12 @@
       wx:for="{{group.records}}"
       wx:for-item="record"
       wx:key="_id"
+      data-record-id="{{record._id}}"
+      data-task-name="{{record.taskName}}"
+      data-points="{{record.points}}"
+      data-points-text="{{record.pointsText}}"
+      data-task-type="{{record.taskType}}"
+      bindlongpress="onLongPressRecord"
     >
       <view class="record-left flex-row">
         <view class="record-info flex-1">
