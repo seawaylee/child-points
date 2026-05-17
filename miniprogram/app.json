@@ -2,11 +2,16 @@
   "pages": [
     "pages/index/index",
     "pages/setup/setup",
-    "pages/record/record",
+    "pages/learn/learn",
     "pages/history/history",
     "pages/record-detail/record-detail",
     "pages/family/family",
-    "pages/task-manage/task-manage"
+    "pages/task-manage/task-manage",
+    "pages/record/record",
+    "pages/learn-chinese/learn-chinese",
+    "pages/learn-english/learn-english",
+    "pages/learn-math/learn-math",
+    "pages/learn-detail/learn-detail"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -28,10 +33,10 @@
         "selectedIconPath": "images/tab-points-active.png"
       },
       {
-        "pagePath": "pages/record/record",
-        "text": "记一笔",
-        "iconPath": "images/tab-record.png",
-        "selectedIconPath": "images/tab-record-active.png"
+        "pagePath": "pages/learn/learn",
+        "text": "学习",
+        "iconPath": "images/tab-learn.png",
+        "selectedIconPath": "images/tab-learn-active.png"
       },
       {
         "pagePath": "pages/history/history",

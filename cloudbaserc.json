@@ -1,0 +1,13 @@
+{
+  "envId": "cloud1-d3gr5o0l455bab8a2",
+  "functionRoot": "cloudfunctions",
+  "functions": [
+    {
+      "name": "tts",
+      "timeout": 20,
+      "runtime": "Nodejs16.13",
+      "handler": "index.main",
+      "memorySize": 256
+    }
+  ]
+}

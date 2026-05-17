@@ -73,6 +73,26 @@
   margin-bottom: 0;
 }
 
+/* 拖拽手柄 */
+.drag-handle {
+  font-size: 28rpx;
+  color: #ccc;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* 拖拽中的项 */
+.dragging-item {
+  opacity: 0.85;
+  transform: scale(1.02);
+  z-index: 10;
+}
+
+.dragging-item .task-manage-item {
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+
 /* 任务项 */
 .task-item-icon {
   width: 68rpx;

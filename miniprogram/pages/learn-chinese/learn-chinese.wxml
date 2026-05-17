@@ -1,0 +1,114 @@
+<view class="container">
+  <!-- 二级分类 Tab -->
+  <view class="tab-bar">
+    <view
+      class="tab-item {{activeTab === item.key ? 'tab-active' : ''}}"
+      wx:for="{{tabs}}"
+      wx:key="key"
+      data-key="{{item.key}}"
+      bindtap="onTabTap"
+    >
+      <text class="tab-text">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 古诗 Tab -->
+  <block wx:if="{{activeTab === 'poem'}}">
+    <!-- 筛选器 -->
+    <view class="filter-bar">
+      <picker
+        class="filter-picker"
+        range="{{levelOptions}}"
+        value="{{levelIndex}}"
+        bindchange="onLevelChange"
+      >
+        <view class="filter-btn">
+          {{levelOptions[levelIndex]}} ▾
+        </view>
+      </picker>
+      <picker
+        class="filter-picker"
+        range="{{dynastyOptions}}"
+        value="{{dynastyIndex}}"
+        bindchange="onDynastyChange"
+      >
+        <view class="filter-btn">
+          {{dynastyOptions[dynastyIndex]}} ▾
+        </view>
+      </picker>
+    </view>
+
+    <!-- 进度摘要 -->
+    <view class="progress-summary" wx:if="{{progressCounts.total > 0}}">
+      <text>共{{progressCounts.total}}首</text>
+      <text class="ps-dot ps-mastered"></text>
+      <text>已掌握{{progressCounts.mastered}}</text>
+      <text class="ps-dot ps-learning"></text>
+      <text>学习中{{progressCounts.learning}}</text>
+    </view>
+
+    <!-- 状态筛选条 -->
+    <view class="status-filter">
+      <view
+        class="status-pill {{statusFilter === item ? 'status-active' : ''}}"
+        wx:for="{{statusOptions}}"
+        wx:key="*this"
+        data-status="{{item}}"
+        bindtap="onStatusFilter"
+      >
+        {{statusLabels[item]}}
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view wx:if="{{loading && poems.length === 0}}" class="empty-state">
+      <view class="empty-text">加载中...</view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:elif="{{filteredPoems.length === 0 && !loading}}" class="empty-state">
+      <view class="empty-icon">📜</view>
+      <view class="empty-text">{{statusFilter === 'all' ? '暂无古诗数据' : '没有符合条件的古诗'}}</view>
+    </view>
+
+    <!-- 诗词列表 -->
+    <view class="poem-list" wx:else>
+      <view
+        class="poem-card card"
+        wx:for="{{filteredPoems}}"
+        wx:key="_id"
+        data-id="{{item._id}}"
+        bindtap="onPoemTap"
+      >
+        <view class="poem-header">
+          <view class="poem-title">{{item.title}}</view>
+          <view class="poem-tags">
+            <text class="tag status-tag mastered-tag" wx:if="{{progressMap[item._id] === 'mastered'}}">已掌握</text>
+            <text class="tag status-tag learning-tag" wx:elif="{{progressMap[item._id] === 'learning'}}">学习中</text>
+            <text class="tag poem-tag" wx:if="{{item.dynasty}}">{{item.dynasty}}</text>
+            <text class="tag poem-tag" wx:if="{{item.level}}">{{item.level}}</text>
+          </view>
+        </view>
+        <view class="poem-author">{{item.author}}</view>
+        <view class="poem-preview">{{item.preview}}</view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{loading && poems.length > 0}}" class="loading-more">
+      <text class="loading-more-text">加载中...</text>
+    </view>
+  </block>
+
+  <!-- 成语 Tab（后续扩展） -->
+  <view wx:elif="{{activeTab === 'idiom'}}" class="empty-state">
+    <view class="empty-icon">📖</view>
+    <view class="empty-text">成语模块开发中</view>
+  </view>
+
+  <!-- 日积月累 Tab（后续扩展） -->
+  <view wx:elif="{{activeTab === 'daily'}}" class="empty-state">
+    <view class="empty-icon">✨</view>
+    <view class="empty-text">日积月累模块开发中</view>
+  </view>
+</view>

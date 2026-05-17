@@ -1,0 +1,36 @@
+<view class="container">
+  <view class="header">
+    <view class="header-title">学习中心</view>
+    <view class="header-desc">选择科目开始学习</view>
+  </view>
+
+  <view class="category-list">
+    <view
+      class="category-card"
+      wx:for="{{categories}}"
+      wx:key="key"
+      data-url="{{item.url}}"
+      bindtap="onCategoryTap"
+      style="background: {{item.color}}; border-left: 8rpx solid {{item.borderColor}}"
+    >
+      <view class="category-top">
+        <view class="category-icon">{{item.icon}}</view>
+        <view class="category-body">
+          <view class="category-name">{{item.name}}</view>
+          <view class="category-desc">{{item.desc}}</view>
+        </view>
+        <view class="category-arrow">›</view>
+      </view>
+      <!-- 进度条（语文和英语显示） -->
+      <view class="category-progress" wx:if="{{progressData[item.key] && progressData[item.key].total > 0}}">
+        <view class="progress-bar">
+          <view class="progress-fill mastered-fill" style="width: {{progressData[item.key].mastered / progressData[item.key].total * 100}}%"></view>
+          <view class="progress-fill learning-fill" style="width: {{progressData[item.key].learning / progressData[item.key].total * 100}}%; left: {{progressData[item.key].mastered / progressData[item.key].total * 100}}%"></view>
+        </view>
+        <view class="progress-text">
+          已掌握 {{progressData[item.key].mastered}}/{{progressData[item.key].total}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,4 +1,5 @@
 const cloud = require('../../utils/cloud')
+const { formatPoints } = require('../../utils/util')
 const app = getApp()
 
 Page({
@@ -22,7 +23,22 @@ Page({
     // 备注
     note: '',
     // 提交中
-    submitting: false
+    submitting: false,
+    // 积分预览
+    pointsPreview: ''
+  },
+
+  _calcPoints() {
+    const { selectedDuration, selectedCount, task } = this.data
+    if (!task) return
+    const mode = task.taskMode || 'duration'
+    let pts = 0
+    if (mode === 'count') {
+      pts = (selectedCount || 0) * (task.pointsPerCount || 1)
+    } else {
+      pts = (selectedDuration || 0) * (task.pointsPerMinute || 1)
+    }
+    this.setData({ pointsPreview: formatPoints(pts) })
   },
 
   onLoad(options) {
@@ -43,6 +59,7 @@ Page({
       if (task) {
         this.setData({ task, loading: false })
         wx.setNavigationBarTitle({ title: task.name })
+        this._calcPoints()
       } else {
         wx.showToast({ title: '任务不存在', icon: 'none' })
         setTimeout(() => wx.navigateBack(), 1500)
@@ -64,6 +81,7 @@ Page({
       customDuration: '',
       showCustomInput: false
     })
+    this._calcPoints()
   },
 
   onCustomDurationToggle() {
@@ -71,6 +89,7 @@ Page({
       showCustomInput: !this.data.showCustomInput,
       selectedDuration: 0
     })
+    this._calcPoints()
   },
 
   onCustomDurationInput(e) {
@@ -79,6 +98,7 @@ Page({
       customDuration: val,
       selectedDuration: parseInt(val) || 0
     })
+    this._calcPoints()
   },
 
   // 次数选择（次数类）
@@ -89,6 +109,7 @@ Page({
       customCount: '',
       showCustomCountInput: false
     })
+    this._calcPoints()
   },
 
   onCustomCountToggle() {
@@ -96,6 +117,7 @@ Page({
       showCustomCountInput: !this.data.showCustomCountInput,
       selectedCount: 0
     })
+    this._calcPoints()
   },
 
   onCustomCountInput(e) {
@@ -104,6 +126,7 @@ Page({
       customCount: val,
       selectedCount: parseInt(val) || 0
     })
+    this._calcPoints()
   },
 
   // 照片
@@ -114,7 +137,6 @@ Page({
       sourceType: ['camera', 'album'],
       success: (res) => {
         const tempFilePath = res.tempFiles[0].tempFilePath
-        // 压缩图片
         wx.compressImage({
           src: tempFilePath,
           quality: 60,
@@ -125,7 +147,6 @@ Page({
             })
           },
           fail: () => {
-            // 压缩失败用原图
             this.setData({
               photoPath: tempFilePath,
               photoUploaded: false
@@ -133,9 +154,7 @@ Page({
           }
         })
       },
-      fail: () => {
-        // 用户取消选择
-      }
+      fail: () => {}
     })
   },
 
@@ -190,7 +209,6 @@ Page({
     try {
       let photoFileId = ''
 
-      // 上传照片
       if (photoPath) {
         const familyInfo = app.getFamilyInfo()
         const familyId = familyInfo ? familyInfo._id : 'default'
@@ -199,7 +217,6 @@ Page({
         photoFileId = uploadRes.fileID
       }
 
-      // 提交记录
       const recordData = {
         action: 'add',
         taskId: task._id,

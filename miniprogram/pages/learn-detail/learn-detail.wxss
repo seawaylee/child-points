@@ -1,0 +1,256 @@
+.container {
+  padding: 20rpx 32rpx;
+}
+
+.loading-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.loading-text {
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 通用卡片 */
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx 36rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 古诗详情 */
+.poem-detail-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.poem-detail-title {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #333;
+}
+
+.poem-detail-tags {
+  display: flex;
+  flex-direction: row;
+}
+
+.poem-tag {
+  font-size: 20rpx;
+  background: #E8F5E9;
+  color: #4CAF50;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  margin-left: 8rpx;
+}
+
+.poem-detail-author {
+  font-size: 28rpx;
+  color: #888;
+  margin-bottom: 32rpx;
+}
+
+.poem-content {
+  padding: 20rpx 0;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.poem-line {
+  font-size: 34rpx;
+  color: #333;
+  line-height: 2;
+  text-align: center;
+}
+
+/* 播放按钮 */
+.play-btn-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 30rpx 0;
+}
+
+.play-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+  border-radius: 40rpx;
+  padding: 18rpx 48rpx;
+  box-shadow: 0 6rpx 16rpx rgba(76, 175, 80, 0.3);
+}
+
+.play-btn:active {
+  opacity: 0.85;
+}
+
+.play-btn-playing {
+  background: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
+  box-shadow: 0 6rpx 16rpx rgba(255, 82, 82, 0.3);
+}
+
+.play-icon {
+  font-size: 32rpx;
+  margin-right: 10rpx;
+}
+
+.play-label {
+  font-size: 28rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 译文 */
+.translation {
+  margin-top: 20rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.translation-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 16rpx;
+}
+
+.translation-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* 英语单词详情 */
+.word-main {
+  text-align: center;
+  padding: 20rpx 0;
+}
+
+.word-text {
+  font-size: 56rpx;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.word-phonetic {
+  font-size: 28rpx;
+  color: #888;
+}
+
+.word-meaning {
+  font-size: 32rpx;
+  color: #555;
+  text-align: center;
+  padding: 24rpx 0;
+  border-top: 1rpx solid #f0f0f0;
+  margin-top: 20rpx;
+}
+
+.word-example {
+  margin-top: 20rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.example-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 10rpx;
+}
+
+.example-en {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+.example-cn {
+  font-size: 26rpx;
+  color: #888;
+  margin-top: 8rpx;
+}
+
+/* 双语详情 */
+.bilingual-section {
+  padding: 20rpx 0;
+}
+
+.bilingual-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 12rpx;
+  font-weight: 600;
+}
+
+.bilingual-text {
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.8;
+}
+
+.bilingual-cn {
+  color: #666;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 22rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+}
+
+/* 学习进度操作按钮 */
+.progress-actions {
+  display: flex;
+  justify-content: center;
+  padding: 30rpx 0;
+}
+
+.action-btn {
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 18rpx 40rpx;
+  border-radius: 40rpx;
+  margin: 0 16rpx;
+}
+
+.action-btn:active {
+  opacity: 0.8;
+}
+
+.btn-learning {
+  background: #fff;
+  color: #2196F3;
+  border: 2rpx solid #2196F3;
+}
+
+.btn-mastered {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: #fff;
+  box-shadow: 0 4rpx 12rpx rgba(76, 175, 80, 0.3);
+}
+
+.btn-reset {
+  background: #fff;
+  color: #999;
+  border: 2rpx solid #ddd;
+}
+
+.btn-done {
+  background: #E8F5E9;
+  color: #4CAF50;
+  border: 2rpx solid #4CAF50;
+}
+
+.btn-review {
+  background: #fff;
+  color: #FF9800;
+  border: 2rpx solid #FF9800;
+}

@@ -1,3 +1,5 @@
+var { formatPoints } = require('../../utils/util')
+
 Component({
   properties: {
     record: {
@@ -9,7 +11,8 @@ Component({
   data: {
     timeStr: '',
     pointsSign: '',
-    pointsColor: ''
+    pointsColor: '',
+    pointsText: '0'
   },
 
   observers: {
@@ -29,7 +32,8 @@ Component({
       this.setData({
         timeStr: timeStr,
         pointsSign: isEarn ? '+' : '',
-        pointsColor: isEarn ? '#4CAF50' : '#F44336'
+        pointsColor: isEarn ? '#4CAF50' : '#F44336',
+        pointsText: formatPoints(Math.abs(record.points || 0))
       })
     }
   },

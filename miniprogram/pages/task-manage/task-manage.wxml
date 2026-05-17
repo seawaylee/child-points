@@ -21,12 +21,16 @@
       </view>
       <view class="task-wrap">
         <view
-          class="task-swipe-wrap"
+          class="task-swipe-wrap {{dragIndex === index && dragList === 'earn' ? 'dragging-item' : ''}}"
           wx:for="{{earnTasks}}"
           wx:key="_id"
           data-task-id="{{item._id}}"
+          data-index="{{index}}"
+          data-list="earn"
+          bindlongpress="onDragStart"
           bindtouchstart="onTouchStart"
-          bindtouchend="onTouchEnd"
+          bindtouchmove="onDragMove"
+          bindtouchend="onDragEnd"
         >
           <view
             class="task-swipe-action"
@@ -41,6 +45,7 @@
               data-task="{{item}}"
               bindtap="onEditTask"
             >
+              <view class="drag-handle">⠿</view>
               <view class="task-item-icon icon-earn-wrap">
                 <text>{{item.emoji || '📖'}}</text>
               </view>
@@ -48,7 +53,7 @@
                 <view class="task-item-name">{{item.name}}</view>
                 <view class="task-item-meta flex-row">
                   <text class="tag-earn">赚积分</text>
-                  <text class="task-item-ppm">{{item.taskMode === 'count' ? (item.pointsPerCount || 1) + '分/次' : (item.pointsPerMinute || 1) + '分/分钟'}}</text>
+                  <text class="task-item-ppm">{{item.pointsLabel}}</text>
                 </view>
               </view>
               <view class="task-toggle" catchtap="onToggleEnabled" data-task-id="{{item._id}}" data-enabled="{{item.enabled !== false}}">
@@ -68,12 +73,16 @@
       </view>
       <view class="task-wrap">
         <view
-          class="task-swipe-wrap"
+          class="task-swipe-wrap {{dragIndex === index && dragList === 'spend' ? 'dragging-item' : ''}}"
           wx:for="{{spendTasks}}"
           wx:key="_id"
           data-task-id="{{item._id}}"
+          data-index="{{index}}"
+          data-list="spend"
+          bindlongpress="onDragStart"
           bindtouchstart="onTouchStart"
-          bindtouchend="onTouchEnd"
+          bindtouchmove="onDragMove"
+          bindtouchend="onDragEnd"
         >
           <view
             class="task-swipe-action"
@@ -88,6 +97,7 @@
               data-task="{{item}}"
               bindtap="onEditTask"
             >
+              <view class="drag-handle">⠿</view>
               <view class="task-item-icon icon-spend-wrap">
                 <text>{{item.emoji || '🎮'}}</text>
               </view>
@@ -95,7 +105,7 @@
                 <view class="task-item-name">{{item.name}}</view>
                 <view class="task-item-meta flex-row">
                   <text class="tag-spend">花积分</text>
-                  <text class="task-item-ppm">{{item.taskMode === 'count' ? (item.pointsPerCount || 1) + '分/次' : (item.pointsPerMinute || 1) + '分/分钟'}}</text>
+                  <text class="task-item-ppm">{{item.pointsLabel}}</text>
                 </view>
               </view>
               <view class="task-toggle" catchtap="onToggleEnabled" data-task-id="{{item._id}}" data-enabled="{{item.enabled !== false}}">

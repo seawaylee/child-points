@@ -1,0 +1,118 @@
+<view class="container">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 古诗详情 -->
+  <block wx:elif="{{type === 'poem' && item}}">
+    <view class="poem-detail card">
+      <view class="poem-detail-header">
+        <view class="poem-detail-title">{{item.title}}</view>
+        <view class="poem-detail-tags">
+          <text class="tag poem-tag" wx:if="{{item.dynasty}}">{{item.dynasty}}</text>
+          <text class="tag poem-tag" wx:if="{{item.form}}">{{item.form}}</text>
+        </view>
+      </view>
+      <view class="poem-detail-author">{{item.author}}</view>
+
+      <view class="poem-content">
+        <view class="poem-line" wx:for="{{item.content}}" wx:key="index">
+          {{item}}
+        </view>
+      </view>
+
+      <!-- 播放按钮 -->
+      <view class="play-btn-wrap">
+        <view class="play-btn {{playState !== 'idle' ? 'play-btn-playing' : ''}}" bindtap="onPlayTap">
+          <text class="play-icon">{{playState === 'loading' ? '⏳' : playState === 'playing' ? '⏹' : '🔊'}}</text>
+          <text class="play-label">{{playState === 'loading' ? '生成中...' : playState === 'playing' ? '停止' : '朗读'}}</text>
+        </view>
+      </view>
+
+      <!-- 译文 -->
+      <view class="translation" wx:if="{{item.translation}}">
+        <view class="translation-title">译文</view>
+        <view class="translation-text">{{item.translation}}</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 英语单词详情 -->
+  <block wx:elif="{{type === 'word' && item}}">
+    <view class="word-detail card">
+      <view class="word-main">
+        <view class="word-text">{{item.word}}</view>
+        <view class="word-phonetic" wx:if="{{item.phonetic}}">{{item.phonetic}}</view>
+      </view>
+      <view class="play-btn-wrap">
+        <view class="play-btn {{playState !== 'idle' ? 'play-btn-playing' : ''}}" bindtap="onPlayTap">
+          <text class="play-icon">{{playState === 'loading' ? '⏳' : playState === 'playing' ? '⏹' : '🔊'}}</text>
+          <text class="play-label">{{playState === 'loading' ? '生成中...' : playState === 'playing' ? '停止' : '播放'}}</text>
+        </view>
+      </view>
+      <view class="word-meaning">{{item.meaning}}</view>
+      <view class="word-example" wx:if="{{item.example}}">
+        <view class="example-label">例句</view>
+        <view class="example-en">{{item.example}}</view>
+        <view class="example-cn" wx:if="{{item.exampleCn}}">{{item.exampleCn}}</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 英语句子/文章详情 -->
+  <block wx:elif="{{(type === 'sentence' || type === 'article') && item}}">
+    <view class="bilingual-detail card">
+      <view class="bilingual-section" wx:if="{{item.title}}">
+        <view class="bilingual-label">{{item.titleCn || item.title}}</view>
+        <view class="bilingual-text" style="font-weight:700;">{{item.title}}</view>
+      </view>
+      <view class="bilingual-section">
+        <view class="bilingual-label">English</view>
+        <view class="bilingual-text">{{item.en}}</view>
+      </view>
+      <view class="play-btn-wrap">
+        <view class="play-btn {{playState !== 'idle' ? 'play-btn-playing' : ''}}" bindtap="onPlayTap">
+          <text class="play-icon">{{playState === 'loading' ? '⏳' : playState === 'playing' ? '⏹' : '🔊'}}</text>
+          <text class="play-label">{{playState === 'loading' ? '生成中...' : playState === 'playing' ? '停止' : '播放'}}</text>
+        </view>
+      </view>
+      <view class="bilingual-section" wx:if="{{item.cn}}">
+        <view class="bilingual-label">中文翻译</view>
+        <view class="bilingual-text bilingual-cn">{{item.cn}}</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 学习进度操作 -->
+  <view class="progress-actions" wx:if="{{!loading && item}}">
+    <!-- 古诗：只有标记掌握/重置 -->
+    <block wx:if="{{type === 'poem'}}">
+      <block wx:if="{{itemStatus === 'mastered'}}">
+        <view class="action-btn btn-done">已掌握</view>
+        <view class="action-btn btn-review" bindtap="onResetProgress">重置</view>
+      </block>
+      <block wx:else>
+        <view class="action-btn btn-mastered" bindtap="onMarkMastered">标记掌握</view>
+      </block>
+    </block>
+    <!-- 其他类型：完整状态 -->
+    <block wx:else>
+      <!-- 未学 -->
+      <block wx:if="{{itemStatus === 'new'}}">
+        <view class="action-btn btn-learning" bindtap="onMarkLearning">开始学习</view>
+        <view class="action-btn btn-mastered" bindtap="onMarkMastered">标记掌握</view>
+      </block>
+      <!-- 学习中 -->
+      <block wx:elif="{{itemStatus === 'learning'}}">
+        <view class="action-btn btn-mastered" bindtap="onMarkMastered">标记掌握</view>
+        <view class="action-btn btn-reset" bindtap="onResetProgress">重置</view>
+      </block>
+      <!-- 已掌握 -->
+      <block wx:elif="{{itemStatus === 'mastered'}}">
+        <view class="action-btn btn-done">已掌握</view>
+        <view class="action-btn btn-review" bindtap="onMarkLearning">再练练</view>
+      </block>
+    </block>
+  </view>
+</view>

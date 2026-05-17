@@ -121,6 +121,19 @@
 - **云函数参数解构要注意作用域**：`updateAction(OPENID, { name, childName, monthlyAllowance })` 中如果直接引用 `event.monthlyAllowance` 会是 undefined，必须从参数解构中取值
 - **switch-case 要覆盖所有 action**：新增前端调用的 action 必须在 cloud function 的 switch 中注册，否则返回"未知的操作类型"。常见遗漏：`leave`、`delete` 等。
 
+### 小程序 observers（数据监听器）
+
+- **observers 监听多字段不可靠**：`'fieldA, fieldB, fieldC'` 的写法在部分场景下不会在每次字段变化时正确触发，尤其是当 setData 同时修改多个字段时。实测发现 observer 的回调可能不执行或参数值不准确。
+- **推荐做法**：不用 observers 计算派生数据，改为在每个事件处理函数末尾手动调用计算函数（如 `_calcPoints()`）。简单直接，行为可预测。
+- **调试技巧**：在 WXML 里临时加一个 `<view>` 显示关键变量值和类型，比 console.log 更直观（console 输出在真机调试时不容易看）。调试完记得删除。
+
+### BSON 数据类型问题
+
+- 云数据库底层是 MongoDB，整数通过 `tcb` CLI 查询显示为 `{"$numberInt": "1"}` 格式
+- 通过 `wx.cloud.callFunction` 返回给小程序的数据，在部分情况下也可能保留 BSON 扩展类型
+- **`JSON.parse(JSON.stringify())` 不能转换 BSON 类型**，它只是原样保留 `{"$numberInt": "1"}` 对象
+- `miniprogram/utils/cloud.js` 中的 `convertBSON()` 函数会递归处理 `$numberInt`、`$numberLong`、`$numberDouble`，转为原生 JS 类型
+
 ### 权限模型
 
 - **admin / member 双角色**：`users` 表的 `role` 字段，创建者为 `admin`，加入者为 `member`
@@ -147,6 +160,93 @@
 **不需要手动配置的东西：**
 - `project.private.config.json` 是 IDE 个人偏好（热重载、URL检查等），IDE 会自动生成，已加入 `.gitignore`
 - 云数据库和云存储跟着云开发环境走，不需要迁移
+
+## tcb CLI 操作指南
+
+CloudBase CLI (v3.3.3) 可在终端直接操作云开发资源，不需要打开微信开发者工具。
+
+### 环境信息
+
+- 环境ID：`cloud1-d3gr5o0l455bab8a2`
+- 全局参数：`-e cloud1-d3gr5o0l455bab8a2`
+
+### 云函数部署
+
+```bash
+# 部署单个云函数（--force 跳过确认，echo "y" 自动确认覆盖）
+echo "y" | tcb fn deploy learn -e cloud1-d3gr5o0l455bab8a2 --dir cloudfunctions/learn --force
+
+# 查看云函数详情（确认超时、内存等配置）
+tcb fn detail learn -e cloud1-d3gr5o0l455bab8a2
+
+# 通过 cloudbaserc.json 配置超时和内存（放在项目根目录）
+# {
+#   "envId": "cloud1-d3gr5o0l455bab8a2",
+#   "functionRoot": "cloudfunctions",
+#   "functions": [{ "name": "tts", "timeout": 20, "runtime": "Nodejs16.13", "handler": "index.main", "memorySize": 256 }]
+# }
+# 部署时自动读取配置：tcb fn deploy tts -e cloud1-d3gr5o0l455bab8a2
+```
+
+### 数据库操作
+
+数据库命令格式统一为 JSON 数组，每个元素包含 `TableName`、`CommandType`、`Command`：
+
+```bash
+# 查询（limit 10 条）
+tcb db nosql execute -e cloud1-d3gr5o0l455bab8a2 --command '[{"TableName":"tasks","CommandType":"QUERY","Command":"{\"find\":\"tasks\",\"limit\":10}"}]'
+
+# 条件查询（filter）
+tcb db nosql execute -e cloud1-d3gr5o0l455bab8a2 --command '[{"TableName":"tasks","CommandType":"QUERY","Command":"{\"find\":\"tasks\",\"filter\":{\"taskMode\":\"count\"},\"limit\":10}"}]'
+
+# 更新（$set）
+tcb db nosql execute -e cloud1-d3gr5o0l455bab8a2 --command '[{"TableName":"poems","CommandType":"UPDATE","Command":"{\"update\":\"poems\",\"updates\":[{\"q\":{\"author\":\"李白\"},\"u\":{\"$set\":{\"dynasty\":\"唐\"}}}]}"}]'
+
+# 插入
+tcb db nosql execute -e cloud1-d3gr5o0l455bab8a2 --command '[{"TableName":"test","CommandType":"INSERT","Command":"{\"insert\":\"test\",\"documents\":[{\"name\":\"hello\"}]}"}]'
+
+# 删除
+tcb db nosql execute -e cloud1-d3gr5o0l455bab8a2 --command '[{"TableName":"test","CommandType":"DELETE","Command":"{\"delete\":\"test\",\"deletes\":[{\"q\":{\"name\":\"hello\"},\"limit\":1}]}"}]'
+
+# 计数
+tcb db nosql execute -e cloud1-d3gr5o0l455bab8a2 --command '[{"TableName":"poems","CommandType":"COMMAND","Command":"{\"count\":\"poems\",\"query\":{}}}"]'
+
+# 聚合
+tcb db nosql execute -e cloud1-d3gr5o0l455bab8a2 --command '[{"TableName":"records","CommandType":"COMMAND","Command":"{\"aggregate\":\"records\",\"pipeline\":[{\"$group\":{\"_id\":\"$taskType\",\"total\":{\"$sum\":\"$points\"}}}],\"cursor\":{}}}"]'
+
+# 加 --json 输出纯 JSON（方便脚本解析）
+tcb db nosql execute -e cloud1-d3gr5o0l455bab8a2 --json --command '[...]'
+```
+
+### 数据库返回值的 BSON 类型
+
+通过 CLI 查询返回的数值字段是 MongoDB Extended JSON 格式：
+- `{"$numberInt": "1"}` → 整数
+- `{"$numberLong": "1234567890"}` → 长整数
+- `{"$date": {"$numberLong": "1778901309658"}}` → 日期
+
+**注意**：通过 `wx.cloud.callFunction` 返回给小程序的数据也可能保留这些 BSON 类型！`miniprogram/utils/cloud.js` 中的 `convertBSON()` 函数会递归转换为原生 JS 类型。如果新增云函数返回数据包含数值字段，确保经过 `cloud.callFunction` 封装层处理。
+
+### 批量数据操作技巧
+
+用脚本批量更新数据时，可以用 Python/Node 生成多条命令然后逐条执行：
+
+```bash
+# Python 示例：批量给古诗补朝代
+python3 -c "
+import subprocess, json
+# 构造更新命令并执行
+cmd = json.dumps([{'TableName':'poems','CommandType':'UPDATE','Command':json.dumps({'update':'poems','updates':[{'q':{'author':'李白'},'u':{'\$set':{'dynasty':'唐'}}}]})}])
+subprocess.run(['tcb','db','nosql','execute','-e','cloud1-d3gr5o0l455bab8a2','--command',cmd])
+"
+```
+
+### 注意事项
+
+- `tcb fn deploy` 会提示覆盖确认，用 `echo "y" |` 管道自动确认
+- `miniprogram/` 目录的改动**不需要部署**，开发者工具编译即可
+- `cloudfunctions/` 目录的改动**必须部署**才能生效
+- CLI 修改的是线上数据/配置，操作不可逆，注意先查询确认再更新/删除
 
 ## 开发约定
 

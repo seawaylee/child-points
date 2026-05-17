@@ -1,0 +1,230 @@
+.container {
+  padding: 0 32rpx;
+}
+
+/* Tab 栏 */
+.tab-bar {
+  display: flex;
+  flex-direction: row;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+  margin-bottom: 20rpx;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  position: relative;
+}
+
+.tab-text {
+  font-size: 30rpx;
+  color: #999;
+  font-weight: 500;
+}
+
+.tab-active .tab-text {
+  color: #4CAF50;
+  font-weight: 700;
+}
+
+.tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48rpx;
+  height: 6rpx;
+  background: #4CAF50;
+  border-radius: 3rpx;
+}
+
+/* 筛选器 */
+.filter-bar {
+  display: flex;
+  flex-direction: row;
+  padding: 16rpx 0;
+}
+
+.filter-picker {
+  margin-right: 20rpx;
+}
+
+.filter-btn {
+  background: #f5f5f5;
+  border-radius: 24rpx;
+  padding: 12rpx 24rpx;
+  font-size: 26rpx;
+  color: #555;
+}
+
+.filter-btn:active {
+  background: #e8e8e8;
+}
+
+/* 诗词列表 */
+.poem-list {
+  padding-top: 10rpx;
+}
+
+.poem-card {
+  padding: 28rpx 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.poem-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.poem-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.poem-tags {
+  display: flex;
+  flex-direction: row;
+}
+
+.poem-tag {
+  font-size: 20rpx;
+  background: #E8F5E9;
+  color: #4CAF50;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  margin-left: 8rpx;
+}
+
+.poem-tag-level {
+  background: #E3F2FD;
+  color: #2196F3;
+}
+
+.poem-author {
+  font-size: 26rpx;
+  color: #888;
+  margin-bottom: 12rpx;
+}
+
+.poem-preview {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* 加载更多 */
+.loading-more {
+  text-align: center;
+  padding: 30rpx 0;
+}
+
+.loading-more-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 通用卡片 */
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.tag {
+  display: inline-block;
+  font-size: 22rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+}
+
+/* 进度摘要 */
+.progress-summary {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: #888;
+  padding: 12rpx 0;
+}
+
+.ps-dot {
+  display: inline-block;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  margin: 0 6rpx 0 16rpx;
+}
+
+.ps-mastered {
+  background: #4CAF50;
+}
+
+.ps-learning {
+  background: #2196F3;
+}
+
+/* 状态筛选条 */
+.status-filter {
+  display: flex;
+  padding: 12rpx 0 20rpx;
+}
+
+.status-pill {
+  font-size: 24rpx;
+  padding: 8rpx 24rpx;
+  border-radius: 20rpx;
+  margin-right: 16rpx;
+  background: #f5f5f5;
+  color: #666;
+}
+
+.status-pill:active {
+  opacity: 0.8;
+}
+
+.status-active {
+  background: #4CAF50;
+  color: #fff;
+}
+
+/* 状态标签 */
+.status-tag {
+  font-size: 18rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 6rpx;
+  margin-left: 6rpx;
+}
+
+.mastered-tag {
+  background: #E8F5E9;
+  color: #4CAF50;
+}
+
+.learning-tag {
+  background: #E3F2FD;
+  color: #2196F3;
+}

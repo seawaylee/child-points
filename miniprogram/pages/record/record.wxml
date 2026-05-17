@@ -34,7 +34,7 @@
             <view class="task-name">{{item.name}}</view>
             <view class="task-meta">
               <text class="tag-earn">赚积分</text>
-              <text class="task-ppm" wx:if="{{item.pointsPerMinute}}">{{item.pointsPerMinute}}分/分钟</text>
+              <text class="task-ppm">{{item.pointsLabel}}</text>
             </view>
           </view>
           <view class="task-arrow">›</view>
@@ -63,7 +63,7 @@
             <view class="task-name">{{item.name}}</view>
             <view class="task-meta">
               <text class="tag-spend">花积分</text>
-              <text class="task-ppm" wx:if="{{item.pointsPerMinute}}">{{item.pointsPerMinute}}分/分钟</text>
+              <text class="task-ppm">{{item.pointsLabel}}</text>
             </view>
           </view>
           <view class="task-arrow">›</view>

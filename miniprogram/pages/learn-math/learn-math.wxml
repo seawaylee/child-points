@@ -1,0 +1,52 @@
+<view class="container">
+  <!-- 设置栏 -->
+  <view class="setting-bar">
+    <picker class="setting-picker" range="{{gradeOptions}}" value="{{grade - 1}}" bindchange="onGradeChange">
+      <view class="setting-btn">{{gradeOptions[grade - 1]}} ▾</view>
+    </picker>
+    <picker class="setting-picker" range="{{opTypes}}" value="{{opIndex}}" bindchange="onOpChange">
+      <view class="setting-btn">{{opTypes[opIndex]}} ▾</view>
+    </picker>
+  </view>
+
+  <!-- 成绩展示 -->
+  <view wx:if="{{submitted}}" class="score-card card">
+    <view class="score-value">{{score}} / {{problems.length}}</view>
+    <view class="score-label">答对题数</view>
+    <view class="score-rate" style="color: {{score / problems.length >= 0.8 ? '#4CAF50' : score / problems.length >= 0.6 ? '#FF9800' : '#F44336'}}">
+      正确率 {{Math.round(score / problems.length * 100)}}%
+    </view>
+  </view>
+
+  <!-- 题目列表 -->
+  <view class="problem-list">
+    <view
+      class="problem-item card {{submitted ? (results[index] ? 'item-correct' : 'item-wrong') : ''}}"
+      wx:for="{{problems}}"
+      wx:key="index"
+    >
+      <view class="problem-expr">{{item.expression}} =</view>
+      <input
+        class="problem-input"
+        type="digit"
+        placeholder="?"
+        value="{{answers[index]}}"
+        data-index="{{index}}"
+        bindinput="onAnswerInput"
+        disabled="{{submitted}}"
+      />
+      <view wx:if="{{submitted && !results[index]}}" class="problem-answer">
+        {{item.answer}}
+      </view>
+      <view wx:if="{{submitted}}" class="problem-icon">
+        {{results[index] ? '✅' : '❌'}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-bar">
+    <view wx:if="{{!submitted}}" class="action-btn btn-submit" bindtap="onSubmit">提交答案</view>
+    <view wx:else class="action-btn btn-retry" bindtap="onRetry">再来一轮</view>
+  </view>
+</view>

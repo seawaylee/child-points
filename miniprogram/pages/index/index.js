@@ -1,4 +1,5 @@
 const cloud = require('../../utils/cloud')
+const { formatPoints } = require('../../utils/util')
 const app = getApp()
 
 const ICON_MAP = {
@@ -74,9 +75,9 @@ Page({
     try {
       const summary = await cloud.callFunction('stats', { action: 'summary' })
       this.setData({
-        balance: summary.balance || 0,
-        todayEarned: summary.todayEarn || 0,
-        todaySpent: summary.todaySpend || 0
+        balance: formatPoints(summary.balance || 0),
+        todayEarned: formatPoints(summary.todayEarn || 0),
+        todaySpent: formatPoints(summary.todaySpend || 0)
       })
     } catch (err) {
       console.error('加载积分失败', err)
@@ -118,7 +119,7 @@ Page({
       const result = await cloud.callFunction('family', { action: 'checkAllowance' })
       if (result && result.granted) {
         wx.showToast({
-          title: `本月赠送 +${result.points} 积分`,
+          title: `本月赠送 +${formatPoints(result.points)} 积分`,
           icon: 'none',
           duration: 3000
         })

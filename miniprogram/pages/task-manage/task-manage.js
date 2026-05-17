@@ -1,9 +1,13 @@
 const cloud = require('../../utils/cloud')
+const { formatPoints } = require('../../utils/util')
 
 const ICON_MAP = {
   book: '📖', homework: '✏️', pen: '🖊️', run: '🏃', clean: '🧹',
   tv: '📺', game: '🎮', snack: '🍪'
 }
+
+// 每个任务卡片的高度（rpx 转 px 近似值）
+const ITEM_HEIGHT = 60
 
 Page({
   data: {
@@ -21,10 +25,15 @@ Page({
     formPointsPerMinute: 1,
     formPointsPerCount: 1,
     formEnabled: true,
-    // 删除
+    // 左滑删除
     touchStartX: 0,
     touchStartY: 0,
-    swipedTaskId: ''
+    swipedTaskId: '',
+    // 拖拽排序
+    dragging: false,
+    dragIndex: -1,
+    dragList: '',
+    dragStartY: 0
   },
 
   onLoad() {
@@ -38,9 +47,12 @@ Page({
   async loadTasks() {
     try {
       this.setData({ loading: true })
-      const tasks = (await cloud.callFunction('task', { action: 'list' }) || []).map(t => ({
+      const tasks = (await cloud.callFunction('task', { action: 'listAll' }) || []).map(t => ({
         ...t,
-        emoji: ICON_MAP[t.icon] || t.icon || '⭐'
+        emoji: ICON_MAP[t.icon] || t.icon || '⭐',
+        pointsLabel: t.taskMode === 'count'
+          ? formatPoints(t.pointsPerCount || 1) + '分/次'
+          : formatPoints(t.pointsPerMinute || 1) + '分/分钟'
       }))
       const earnTasks = tasks.filter(t => t.type === 'earn')
       const spendTasks = tasks.filter(t => t.type === 'spend')
@@ -73,6 +85,7 @@ Page({
   },
 
   onEditTask(e) {
+    if (this.data.dragging) return
     const { task } = e.currentTarget.dataset
     this.setData({
       showForm: true,
@@ -114,11 +127,13 @@ Page({
   },
 
   onFormPPMInput(e) {
-    this.setData({ formPointsPerMinute: parseFloat(e.detail.value) || 1 })
+    const val = e.detail.value
+    this.setData({ formPointsPerMinute: val === '' ? '' : parseFloat(val) || 1 })
   },
 
   onFormPPCInput(e) {
-    this.setData({ formPointsPerCount: parseFloat(e.detail.value) || 1 })
+    const val = e.detail.value
+    this.setData({ formPointsPerCount: val === '' ? '' : parseFloat(val) || 1 })
   },
 
   async onSubmitForm() {
@@ -136,8 +151,8 @@ Page({
         type: formType,
         icon: formIcon.trim(),
         taskMode: formTaskMode,
-        pointsPerMinute: formTaskMode === 'duration' ? formPointsPerMinute : 0,
-        pointsPerCount: formTaskMode === 'count' ? formPointsPerCount : 0,
+        pointsPerMinute: formTaskMode === 'duration' ? (formPointsPerMinute || 1) : 0,
+        pointsPerCount: formTaskMode === 'count' ? (formPointsPerCount || 1) : 0,
         enabled: formEnabled
       }
 
@@ -164,8 +179,9 @@ Page({
     }
   },
 
-  // === 删除任务 ===
+  // === 左滑删除 ===
   onTouchStart(e) {
+    if (this.data.dragging) return
     this.setData({
       touchStartX: e.touches[0].clientX,
       touchStartY: e.touches[0].clientY
@@ -173,13 +189,13 @@ Page({
   },
 
   onTouchEnd(e) {
+    if (this.data.dragging) return
     const { touchStartX, touchStartY } = this.data
     const endX = e.changedTouches[0].clientX
     const endY = e.changedTouches[0].clientY
     const deltaX = endX - touchStartX
     const deltaY = Math.abs(endY - touchStartY)
 
-    // 水平滑动超过60且水平位移大于垂直位移
     if (deltaX < -60 && deltaY < 40) {
       const { taskId } = e.currentTarget.dataset
       this.setData({ swipedTaskId: taskId })
@@ -221,6 +237,82 @@ Page({
   // 点击空白处收起滑动
   onTapBlank() {
     this.setData({ swipedTaskId: '' })
+  },
+
+  // === 长按拖拽排序 ===
+  onDragStart(e) {
+    const { index, list } = e.currentTarget.dataset
+    // 用 SelectorQuery 获取拖拽区域起始 Y 坐标
+    const query = wx.createSelectorQuery().in(this)
+    query.selectAll('.task-swipe-wrap').boundingClientRect()
+    query.exec((res) => {
+      const rects = res[0]
+      if (!rects || rects.length === 0) return
+      // 只取对应 list 的项（earn 在前，spend 在后）
+      const earnLen = this.data.earnTasks.length
+      const items = list === 'earn' ? rects.slice(0, earnLen) : rects.slice(earnLen)
+      this._dragItemRects = items
+      this.setData({
+        dragging: true,
+        dragIndex: index,
+        dragList: list,
+        swipedTaskId: ''
+      })
+      wx.vibrateShort({ type: 'light' })
+    })
+  },
+
+  onDragMove(e) {
+    if (!this.data.dragging) return
+    const { dragIndex, dragList } = this.data
+    const currentY = e.touches[0].clientY
+    const key = dragList === 'earn' ? 'earnTasks' : 'spendTasks'
+    const tasks = this.data[key]
+
+    if (!this._dragItemRects || this._dragItemRects.length === 0) return
+
+    let targetIndex = -1
+    for (let i = 0; i < this._dragItemRects.length; i++) {
+      const rect = this._dragItemRects[i]
+      if (currentY >= rect.top && currentY <= rect.bottom) {
+        targetIndex = i
+        break
+      }
+    }
+
+    if (targetIndex >= 0 && targetIndex !== dragIndex) {
+      const newTasks = [...tasks]
+      const item = newTasks.splice(dragIndex, 1)[0]
+      newTasks.splice(targetIndex, 0, item)
+      // 同步更新 rects 缓存的位置
+      const movedRect = this._dragItemRects.splice(dragIndex, 1)[0]
+      this._dragItemRects.splice(targetIndex, 0, movedRect)
+      this.setData({
+        [key]: newTasks,
+        dragIndex: targetIndex
+      })
+    }
+  },
+
+  onDragEnd(e) {
+    if (!this.data.dragging) return
+    const { dragList } = this.data
+    const key = dragList === 'earn' ? 'earnTasks' : 'spendTasks'
+    const tasks = this.data[key]
+    this.setData({ dragging: false, dragIndex: -1, dragList: '' })
+    this.saveOrder(tasks)
+  },
+
+  async saveOrder(tasks) {
+    const reorderData = tasks.map((t, i) => ({ _id: t._id, sortOrder: i }))
+    try {
+      await cloud.callFunction('task', {
+        action: 'reorder',
+        tasks: reorderData
+      })
+    } catch (err) {
+      console.error('排序保存失败', err)
+    }
   },
 
   // === 启用/禁用 ===

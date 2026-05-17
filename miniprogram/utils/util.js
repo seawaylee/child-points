@@ -49,10 +49,18 @@ function getMonthStart() {
   return d
 }
 
+function formatPoints(num) {
+  if (num == null) return '0'
+  const n = Number(num)
+  if (Number.isInteger(n)) return String(n)
+  return n.toFixed(1)
+}
+
 module.exports = {
   formatDate,
   formatTime,
   formatDateTime,
+  formatPoints,
   generateInviteCode,
   getTodayStart,
   getWeekStart,

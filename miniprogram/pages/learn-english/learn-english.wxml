@@ -1,0 +1,173 @@
+<view class="container">
+  <!-- Tab 栏 -->
+  <view class="tab-bar">
+    <view
+      class="tab-item {{activeTab === item.key ? 'tab-active' : ''}}"
+      wx:for="{{tabs}}"
+      wx:key="key"
+      data-key="{{item.key}}"
+      bindtap="onTabTap"
+    >
+      <text class="tab-text">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 筛选栏 + 学习按钮 -->
+  <view class="filter-row">
+    <picker wx:if="{{activeTab === 'word'}}" range="{{gradeOptions}}" value="{{gradeIndex}}" bindchange="onGradeChange">
+      <view class="filter-btn">{{gradeOptions[gradeIndex]}} ▾</view>
+    </picker>
+    <picker wx:if="{{activeTab !== 'word'}}" range="{{levelOptions}}" value="{{levelIndex}}" bindchange="onLevelChange">
+      <view class="filter-btn">{{levelOptions[levelIndex]}} ▾</view>
+    </picker>
+    <view class="study-toggle" bindtap="onStartStudy" wx:if="{{items.length > 0 && mode === 'browse'}}">
+      开始学习
+    </view>
+  </view>
+
+  <!-- 进度摘要 + 状态筛选 -->
+  <block wx:if="{{mode === 'browse'}}">
+    <view class="progress-summary" wx:if="{{progressCounts.total > 0}}">
+      <text>共{{progressCounts.total}}项</text>
+      <text class="ps-dot ps-mastered"></text>
+      <text>掌握{{progressCounts.mastered}}</text>
+      <text class="ps-dot ps-learning"></text>
+      <text>学习中{{progressCounts.learning}}</text>
+    </view>
+    <view class="status-filter">
+      <view
+        class="status-pill {{statusFilter === item ? 'status-active' : ''}}"
+        wx:for="{{statusOptions}}"
+        wx:key="*this"
+        data-status="{{item}}"
+        bindtap="onStatusFilter"
+      >
+        {{statusLabels[item]}}
+      </view>
+    </view>
+  </block>
+
+  <!-- ========== 浏览模式 ========== -->
+  <block wx:if="{{mode === 'browse'}}">
+    <view wx:if="{{loading && items.length === 0}}" class="empty-state">
+      <view class="empty-text">加载中...</view>
+    </view>
+
+    <view wx:elif="{{items.length === 0 && !loading}}" class="empty-state">
+      <view class="empty-icon">🇬🇧</view>
+      <view class="empty-text">暂无数据</view>
+      <view class="empty-text" style="margin-top:10rpx;font-size:24rpx;">请先导入英语数据到云数据库</view>
+    </view>
+
+    <!-- 单词列表 -->
+    <block wx:elif="{{activeTab === 'word'}}">
+      <view class="word-list">
+        <view
+          class="word-card card {{progressMap[item._id] === 'mastered' ? 'word-mastered' : ''}}"
+          wx:for="{{filteredItems}}"
+          wx:key="_id"
+          data-index="{{index}}"
+          bindtap="onItemTap"
+        >
+          <view class="word-row">
+            <view class="word-en">{{item.word}}</view>
+            <view class="word-phonetic" wx:if="{{item.phonetic}}">{{item.phonetic}}</view>
+            <view class="status-dot mastered" wx:if="{{progressMap[item._id] === 'mastered'}}"></view>
+            <view class="status-dot learning" wx:elif="{{progressMap[item._id] === 'learning'}}"></view>
+          </view>
+          <view class="word-meaning">{{item.meaning}}</view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 短句/段落/文章列表 -->
+    <block wx:else>
+      <view class="content-list">
+        <view
+          class="content-card card {{progressMap[item._id] === 'mastered' ? 'word-mastered' : ''}}"
+          wx:for="{{filteredItems}}"
+          wx:key="_id"
+          data-index="{{index}}"
+          bindtap="onItemTap"
+        >
+          <view class="content-en">{{item.en}}</view>
+          <view class="content-cn">{{item.cn}}</view>
+        </view>
+      </view>
+    </block>
+
+    <view wx:if="{{loading && items.length > 0}}" class="loading-more">
+      <text class="loading-more-text">加载中...</text>
+    </view>
+  </block>
+
+  <!-- ========== 学习模式 ========== -->
+  <block wx:if="{{mode === 'study'}}">
+    <!-- 进度条 -->
+    <view class="study-progress">
+      <view class="progress-text">第 {{currentGroupIndex + 1}} 组 · {{currentItemIndex + 1}}/{{currentGroup.length}}</view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{(currentItemIndex + 1) / currentGroup.length * 100}}%"></view>
+      </view>
+    </view>
+
+    <!-- 当前学习项 -->
+    <view class="study-card card" bindtap="onStudyItemTap">
+      <!-- 单词模式 -->
+      <block wx:if="{{activeTab === 'word'}}">
+        <view class="study-word">{{currentGroup[currentItemIndex].word}}</view>
+        <view class="study-phonetic" wx:if="{{currentGroup[currentItemIndex].phonetic}}">{{currentGroup[currentItemIndex].phonetic}}</view>
+        <view wx:if="{{showWordDetail}}" class="study-detail">
+          <view class="study-meaning">{{currentGroup[currentItemIndex].meaning}}</view>
+          <view class="study-example" wx:if="{{currentGroup[currentItemIndex].example}}">
+            <text class="example-en">{{currentGroup[currentItemIndex].example}}</text>
+            <text class="example-cn" wx:if="{{currentGroup[currentItemIndex].exampleCn}}">{{currentGroup[currentItemIndex].exampleCn}}</text>
+          </view>
+        </view>
+        <view wx:else class="study-hint">点击查看释义</view>
+      </block>
+
+      <!-- 句子模式 -->
+      <block wx:else>
+        <view class="study-en">{{currentGroup[currentItemIndex].en}}</view>
+        <view wx:if="{{showWordDetail}}" class="study-detail">
+          <view class="study-cn">{{currentGroup[currentItemIndex].cn}}</view>
+        </view>
+        <view wx:else class="study-hint">点击查看翻译</view>
+      </block>
+    </view>
+
+    <!-- 导航按钮 -->
+    <view class="study-nav">
+      <view class="nav-btn" wx:if="{{currentItemIndex > 0}}" bindtap="onPrevItem">上一个</view>
+      <view class="nav-btn {{currentItemIndex < currentGroup.length - 1 ? 'nav-next' : 'nav-finish'}}"
+            bindtap="{{currentItemIndex < currentGroup.length - 1 ? 'onNextItem' : 'onFinishGroup'}}">
+        {{currentItemIndex < currentGroup.length - 1 ? '下一个' : '完成本组'}}
+      </view>
+    </view>
+
+    <!-- 退出按钮 -->
+    <view class="exit-study" bindtap="onExitStudy">退出学习模式</view>
+  </block>
+
+  <!-- ========== 评分弹窗 ========== -->
+  <view class="rating-overlay" wx:if="{{showRating}}" bindtap="onCloseRating">
+    <view class="rating-panel" catchtap="">
+      <view class="rating-title">本组学完了，掌握得怎么样？</view>
+      <view class="rating-btns">
+        <view class="rating-btn rating-3" data-rating="3" bindtap="onRate">
+          <view class="rating-icon">😊</view>
+          <view class="rating-label">掌握了</view>
+        </view>
+        <view class="rating-btn rating-2" data-rating="2" bindtap="onRate">
+          <view class="rating-icon">🔄</view>
+          <view class="rating-label">还要练</view>
+        </view>
+        <view class="rating-btn rating-1" data-rating="1" bindtap="onRate">
+          <view class="rating-icon">😰</view>
+          <view class="rating-label">没记住</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

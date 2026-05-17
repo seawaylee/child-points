@@ -1,5 +1,5 @@
 const cloud = require('../../utils/cloud')
-const { formatDate, formatTime } = require('../../utils/util')
+const { formatDate, formatTime, formatPoints } = require('../../utils/util')
 
 Page({
   data: {
@@ -39,8 +39,8 @@ Page({
     try {
       const summary = await cloud.callFunction('stats', { action: 'summary' })
       this.setData({
-        weekEarned: summary.weekEarn || 0,
-        weekSpent: summary.weekSpend || 0
+        weekEarned: formatPoints(summary.weekEarn || 0),
+        weekSpent: formatPoints(summary.weekSpend || 0)
       })
     } catch (err) {
       console.error('加载统计失败', err)
@@ -67,7 +67,7 @@ Page({
       const records = (result.list || []).map(r => ({
         ...r,
         timeStr: formatTime(new Date(r.createdAt)),
-        pointsText: r.taskType === 'earn' ? `+${r.points}` : `${r.points}`
+        pointsText: r.taskType === 'earn' ? `+${formatPoints(r.points)}` : `${formatPoints(r.points)}`
       }))
 
       // 批量转换照片 fileID 为临时 URL
