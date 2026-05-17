@@ -128,12 +128,12 @@ Page({
 
   onFormPPMInput(e) {
     const val = e.detail.value
-    this.setData({ formPointsPerMinute: val === '' ? '' : parseFloat(val) || 1 })
+    this.setData({ formPointsPerMinute: val })
   },
 
   onFormPPCInput(e) {
     const val = e.detail.value
-    this.setData({ formPointsPerCount: val === '' ? '' : parseFloat(val) || 1 })
+    this.setData({ formPointsPerCount: val })
   },
 
   async onSubmitForm() {
@@ -144,6 +144,9 @@ Page({
       return
     }
 
+    const ppm = parseFloat(formPointsPerMinute) || 1
+    const ppc = parseFloat(formPointsPerCount) || 1
+
     wx.showLoading({ title: '保存中...' })
     try {
       const taskData = {
@@ -151,8 +154,8 @@ Page({
         type: formType,
         icon: formIcon.trim(),
         taskMode: formTaskMode,
-        pointsPerMinute: formTaskMode === 'duration' ? (formPointsPerMinute || 1) : 0,
-        pointsPerCount: formTaskMode === 'count' ? (formPointsPerCount || 1) : 0,
+        pointsPerMinute: formTaskMode === 'duration' ? ppm : 0,
+        pointsPerCount: formTaskMode === 'count' ? ppc : 0,
         enabled: formEnabled
       }
 
